@@ -466,3 +466,102 @@ footer,.site-bottom{background:var(--wine)!important}
   .cart-qty button{width:36px;height:34px}
   .cart-qty input{width:48px;height:34px}
 }
+
+/* polish: footer icons/titles, faster cards, redesigned country & winery sliders */
+.footer-columns h4,.footer-contact h4{
+  color:var(--paper)!important;
+  font-family:'CCS Belvare',serif!important;
+  font-weight:400!important;
+  font-size:17px!important;
+  line-height:1.1;
+  margin:0 0 12px!important;
+}
+.footer-contact,.footer-contact span{color:rgba(244,240,200,.64)!important}
+.socials a{
+  color:var(--paper)!important;
+  opacity:1!important;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease;
+}
+.socials a:hover{transform:translateY(-2px);background:rgba(244,240,200,.08);border-color:rgba(244,240,200,.42)}
+.socials svg,.social-svg{
+  width:23px;height:23px;display:block;color:var(--paper)!important;opacity:1!important;
+}
+.socials .social-svg{fill:currentColor!important;stroke:none!important}
+.whatsapp-float .social-svg{width:29px;height:29px;fill:#fff;stroke:none}
+.footer-location{display:block;margin-top:10px;font-size:10px;line-height:1.5;color:rgba(244,240,200,.52);letter-spacing:.03em}
+
+/* country cards: compact, useful, swipeable */
+.country-slider{gap:12px}
+.region-card{
+  min-width:230px!important;
+  width:230px;
+  height:126px!important;
+  min-height:126px!important;
+  padding:15px 16px!important;
+  border-radius:20px!important;
+  display:flex!important;
+  flex-direction:column;
+  justify-content:space-between!important;
+  align-items:stretch!important;
+  background:linear-gradient(145deg,#53082f 0%,#6f0841 100%)!important;
+  border:1px solid rgba(244,240,200,.12);
+  box-shadow:none;
+}
+.region-card:before{
+  background:radial-gradient(circle at 100% 0,rgba(214,155,53,.14),transparent 42%)!important;
+}
+.country-card-top{display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0!important;min-width:0}
+.region-card .country-flag{
+  position:relative!important;left:auto!important;top:auto!important;
+  width:38px!important;height:38px!important;flex:0 0 38px;
+  border:2px solid rgba(255,255,255,.9);
+}
+.country-count{font:700 9px/1 Lato,Arial,sans-serif!important;text-transform:uppercase;letter-spacing:.08em;color:rgba(244,240,200,.58)!important}
+.country-card-main{padding:0!important;min-width:0}
+.country-card-main strong{font-size:27px!important;line-height:1!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.country-card-main span{font-size:10px!important;margin-top:5px!important;color:rgba(244,240,200,.62)!important}
+.country-card-arrow{position:absolute!important;right:16px!important;bottom:15px!important;font-size:17px!important;color:var(--paper)!important}
+
+/* winery cards: same compact language, clickable to filtered shop */
+.winery-row{gap:12px}
+.winery-card{
+  min-width:260px!important;width:260px;min-height:132px!important;height:132px!important;
+  padding:18px!important;border-radius:20px!important;
+  display:flex!important;align-items:flex-end!important;
+  background:linear-gradient(145deg,#52072f 0%,#69043e 100%)!important;
+  border:1px solid rgba(244,240,200,.12);
+}
+.winery-logo-slot{
+  position:absolute!important;left:18px!important;top:16px!important;
+  width:48px!important;height:48px!important;border-radius:14px!important;
+  display:grid!important;place-items:center!important;
+  background:rgba(244,240,200,.10)!important;border:1px solid rgba(244,240,200,.22)!important;
+}
+.winery-logo-slot span{font:700 11px Lato,Arial,sans-serif;color:var(--paper)}
+.winery-card-main{padding:0 38px 0 0!important;min-width:0}
+.winery-card-main strong{font-size:24px!important;line-height:1!important}
+.winery-card-main span{font-size:10px!important;color:rgba(244,240,200,.58)!important;margin-top:5px!important;display:block}
+.winery-card .country-flag.small{
+  position:absolute!important;right:16px!important;top:16px!important;left:auto!important;
+  width:30px!important;height:30px!important;border-radius:50%;
+}
+.winery-arrow{position:absolute;right:17px;bottom:16px;font-size:17px}
+
+/* progressive image loading / rendering performance */
+.wine-photo-placeholder{
+  display:block;width:46%;height:82%;border-radius:12px;
+  background:linear-gradient(90deg,rgba(71,7,44,.04),rgba(71,7,44,.08),rgba(71,7,44,.04));
+  background-size:200% 100%;animation:wineLoad 1.2s linear infinite;
+}
+@keyframes wineLoad{to{background-position:-200% 0}}
+.wine-card,.region-card,.winery-card,.grape-tile{
+  content-visibility:auto;
+  contain-intrinsic-size:300px 420px;
+}
+.region-card,.winery-card,.grape-tile{contain-intrinsic-size:260px 140px}
+.wine-photo{loading:auto}
+
+@media(max-width:760px){
+  .region-card{min-width:70vw!important;max-width:260px!important;width:auto!important;height:122px!important;min-height:122px!important}
+  .winery-card{min-width:72vw!important;max-width:275px!important;width:auto!important}
+}
