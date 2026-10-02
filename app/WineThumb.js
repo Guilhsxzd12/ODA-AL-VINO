@@ -108,5 +108,6 @@ export default function WineThumb({wine,className='wine-photo'}){
  },[src]);
 
  if(!display)return <span ref={ref} className="wine-photo-placeholder" aria-hidden="true"/>;
- return <img ref={ref} className={className} src={display} alt={wine?.name||'Rótulo de vinho'} loading="lazy" decoding="async" draggable="false"/>;
+ const webSource=/^https?:\/\//i.test(src);
+ return <img ref={ref} className={`${className} ${webSource?'web-photo':''}`} src={display} alt={wine?.name||'Rótulo de vinho'} loading="lazy" decoding="async" draggable="false"/>;
 }
