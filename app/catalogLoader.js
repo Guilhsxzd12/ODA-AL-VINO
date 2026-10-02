@@ -108,7 +108,8 @@ export async function loadWineById(id){
 
 export async function loadRelatedWines(winery,excludeId,limit=12){
   if(!winery)return [];
-  const q='select=*&active=eq.true&winery=eq.'+encodeURIComponent(winery)+'&id=neq.'+encodeURIComponent(excludeId||'')+'&order=sort_order.asc&limit='+Number(limit||12);
+  const fields='id,name,winery,country,country_code,region,grape,alcohol,aging,type,tasting_notes,price,source_catalog,source_page,new_arrival,featured,active,in_stock,sort_order';
+  const q='select='+fields+'&active=eq.true&winery=eq.'+encodeURIComponent(winery)+'&id=neq.'+encodeURIComponent(excludeId||'')+'&order=sort_order.asc&limit='+Number(limit||12);
   const rows=await fetchRows(q);
   return rows.map(normalize);
 }
