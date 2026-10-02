@@ -2,17 +2,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { HEADER_LOGO } from '../brand';
 import { loadCatalog, money, winePath } from '../catalogLoader';
-import WineImage from '../WineImage';
 
 function CartIcon(){return <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"/></svg>}
 function SearchIcon(){return <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>}
 function MenuIcon(){return <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>}
+function CloseIcon(){return <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>}
 function FilterIcon(){return <svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>}
 function Arrow(){return <span>→</span>}
 function WhatsIcon(){return <img className="social-icon-img" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt=""/>}
 function Flag({code,name,className=''}){return code?<span className={`flag-wrap ${className}`}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`}/></span>:null}
 function Bottle({wine}){return <div className="bottle-wrap"><div className={`bottle ${wine?.tone||'blend'}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>{(wine?.name||'VINHO').slice(0,18)}</b><small>{(wine?.winery||'VIDEIRA').slice(0,18)}</small></div></div></div></div>}
-function ProductVisual({wine}){return wine?.image_url?<WineImage className="wine-photo" src={wine.image_url} alt={wine.name}/>:<Bottle wine={wine}/>}
+function ProductVisual({wine}){return wine?.image_url?<img className="wine-photo" src={wine.image_url} alt={wine.name} draggable="false"/>:<Bottle wine={wine}/>} 
 function ProductCard({w,onAdd}){return <article className="wine-card"><Flag code={w.flag} name={w.country} className="origin-flag"/><a className="wine-card-link" href={winePath(w)}><div className="wine-image"><ProductVisual wine={w}/></div><div className="wine-meta"><small>{w.country||'Vinho'}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grapeDisplay||w.type||''}</span></div></a><div className="price-line"><strong>{money(w.price)}</strong><button onClick={e=>{e.preventDefault();e.stopPropagation();onAdd(w)}}><CartIcon/></button></div></article>}
 
 export default function LojaPage(){
@@ -29,7 +29,7 @@ export default function LojaPage(){
  const checkout=()=>{const lines=cart.map(p=>`• ${p.name} — ${money(p.price)}`).join('\n');window.open(`https://wa.me/5545999056277?text=${encodeURIComponent(`Olá! Quero consultar estes vinhos:\n\n${lines}\n\nTotal: ${money(total)}`)}`,'_blank')};
 
  return <>
-  <header className="floating-header"><div className="header-pill"><a className="header-logo" href="/"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a><nav><a href="/">Início</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav><div className="header-actions"><a className="icon-btn search-btn" href="#busca"><SearchIcon/></a><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button><a className="shop-pill active" href="/loja">Loja <Arrow/></a><button className="icon-btn mobile-menu-btn" onClick={()=>setMenuOpen(true)} aria-label="Abrir menu"><MenuIcon/></button></div></div></header>
+  <header className="floating-header"><div className="header-pill"><a className="header-logo" href="/"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a><nav><a href="/">Início</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav><div className="header-actions"><a className="icon-btn search-btn" href="#busca"><SearchIcon/></a><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button><a className="shop-pill active" href="/loja">Loja <Arrow/></a><button className={`icon-btn mobile-menu-btn ${menuOpen?'is-open':''}`} onClick={()=>setMenuOpen(v=>!v)} aria-label={menuOpen?'Fechar menu':'Abrir menu'}>{menuOpen?<CloseIcon/>:<MenuIcon/>}</button></div></div></header>
   <main className="shop-page">
    <section id="busca" className="shop-search-wrap"><div className="shop-search"><SearchIcon/><input value={query} onChange={e=>{setQuery(e.target.value);setPage(1)}} placeholder="Pesquise por vinho, uva, país, região ou bodega..."/></div></section>
    <section className="shop-layout">
@@ -38,7 +38,7 @@ export default function LojaPage(){
    </section>
   </main>
 
-  <aside className={`mobile-menu ${menuOpen?'open':''}`}><div className="mobile-menu-shell"><div className="mobile-menu-top"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/><div><button className="mobile-menu-cart" onClick={()=>{setMenuOpen(false);setCartOpen(true)}} aria-label="Abrir carrinho"><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button><button className="mobile-menu-close" onClick={()=>setMenuOpen(false)} aria-label="Fechar menu">×</button></div></div><nav className="mobile-menu-links"><a href="/">Início</a><a href="/loja">Loja</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav></div></aside>{menuOpen&&<button className="menu-backdrop" onClick={()=>setMenuOpen(false)}/>}
+  <aside className={`mobile-menu ${menuOpen?'open':''}`}><div className="mobile-menu-shell"><nav className="mobile-menu-links"><a href="/">Início</a><a href="/loja">Loja</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav></div></aside>{menuOpen&&<button className="menu-backdrop" onClick={()=>setMenuOpen(false)}/>}
   {filtersOpen&&<button className="filter-backdrop" onClick={()=>setFiltersOpen(false)}/>}
   <a className="whatsapp-float" href="https://wa.me/5545999056277" target="_blank"><WhatsIcon/></a>
   <aside className={`cart-drawer ${cartOpen?'open':''}`}><button className="drawer-close" onClick={()=>setCartOpen(false)}>×</button><p className="kicker dark">SEU CARRINHO</p><h2>Minha seleção</h2><div className="cart-items">{cart.length===0?<p className="empty">Seu carrinho está vazio.</p>:cart.map((p,i)=><div className="cart-item" key={i}><div><strong>{p.name}</strong><span>{p.winery}</span></div><div><b>{money(p.price)}</b><button onClick={()=>remove(i)}>Remover</button></div></div>)}</div><div className="cart-total"><span>Total</span><strong>{money(total)}</strong></div><button className="checkout" disabled={!cart.length} onClick={checkout}>Continuar no WhatsApp</button></aside>{cartOpen&&<button className="backdrop" onClick={()=>setCartOpen(false)}/>}
