@@ -87,3 +87,31 @@ footer{grid-template-columns:1.1fr 1.2fr 1fr}.footer-brand img{height:92px;max-w
 .shop-page-hero{display:none!important}
 @media(max-width:1150px){.header-logo{min-width:180px}.header-logo img{height:54px;max-width:175px}}
 @media(max-width:760px){.header-logo{min-width:98px;width:98px}.header-logo img{height:46px;max-width:98px}.footer-brand img{height:118px;max-width:260px}}
+
+/* layout fixes from visual review */
+footer{align-items:flex-start}
+.footer-brand,.footer-columns,.footer-contact{align-self:flex-start}
+.footer-contact{align-items:flex-start}
+.footer-logo-lockup{height:105px;display:flex;align-items:center}
+.footer-logo-lockup img{height:74px;max-width:270px;width:auto;object-fit:contain}
+.footer-contact .socials{margin-top:2px}
+.region-card,.grape-tile,.winery-card{position:relative;isolation:isolate;overflow:hidden}
+.region-card{min-height:142px;padding:64px 22px 18px}
+.region-card>div{min-width:0;padding-right:28px}
+.region-card strong,.region-card div>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.region-card>.country-flag{left:18px;top:16px}
+.winery-card{min-width:290px;min-height:170px;padding:82px 20px 18px;display:flex;align-items:flex-end}
+.winery-card>div:not(.winery-logo-slot){min-width:0;padding-right:54px}
+.winery-card strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.winery-logo-slot{left:20px;top:18px;width:78px;height:50px}
+.winery-card .country-flag.small{right:18px;top:18px;left:auto}
+.grape-tile{min-height:150px}
+.wine-card-link{display:block;color:inherit}
+.wine-card>.price-line{margin:0 5px 4px;padding-top:14px;border-top:1px solid var(--line)}
+.wine-card .wine-meta{padding-bottom:10px}
+@media(max-width:760px){
+  .region-card{min-width:245px}
+  .winery-card{min-width:260px}
+  footer{grid-template-columns:1fr}
+  .footer-contact{align-items:flex-start}
+}
