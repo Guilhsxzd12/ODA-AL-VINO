@@ -83,7 +83,7 @@ async function fetchRows(query){
 export function loadCatalog(){
   if(!catalogPromise){
     catalogPromise=(async()=>{
-      const rows=await fetchRows('select=id,name,winery,country,country_code,region,grape,alcohol,aging,type,tasting_notes,price,source_catalog,source_page,new_arrival,featured,active,sort_order&active=eq.true&order=sort_order.asc');
+      const rows=await fetchRows('select=id,name,winery,country,country_code,region,grape,alcohol,aging,type,tasting_notes,price,source_catalog,source_page,new_arrival,featured,active,in_stock,sort_order&active=eq.true&order=sort_order.asc');
       return rows.map(normalize);
     })();
   }
