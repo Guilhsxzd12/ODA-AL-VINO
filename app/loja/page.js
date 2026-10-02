@@ -75,6 +75,7 @@ export default function LojaPage(){
     setGrape(params.get('uva')||'');
     setWinery(params.get('bodega')||'');
     setOnlyNew(params.get('novidades')==='1');
+    setQuery(params.get('q')||'');
   },[]);
   const perPage=8;
 
@@ -91,11 +92,11 @@ export default function LojaPage(){
     <header className="floating-header"><div className="header-pill">
       <a className="header-logo" href="/"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a>
       <nav><a href="/">Início</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav>
-      <div className="header-actions"><button className="icon-btn search-btn"><SearchIcon/></button><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button><a className="shop-pill active" href="/loja">Loja <Arrow/></a></div>
+      <div className="header-actions"><a className="icon-btn search-btn" href="#busca" aria-label="Ir para pesquisa"><SearchIcon/></a><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button><a className="shop-pill active" href="/loja">Loja <Arrow/></a></div>
     </div></header>
 
     <main className="shop-page">
-      <section className="shop-search-wrap"><div className="shop-search"><SearchIcon/><input value={query} onChange={e=>{setQuery(e.target.value);setPage(1)}} placeholder="Pesquise por vinho, uva, país ou bodega..." aria-label="Pesquisar vinhos"/></div></section>
+      <section id="busca" className="shop-search-wrap"><div className="shop-search"><SearchIcon/><input value={query} onChange={e=>{setQuery(e.target.value);setPage(1)}} placeholder="Pesquise por vinho, uva, país ou bodega..." aria-label="Pesquisar vinhos"/></div></section>
       <section className="shop-layout">
         <aside className="filters">
           <div className="filter-head"><h3>Filtros</h3><button onClick={reset}>Limpar</button></div>
