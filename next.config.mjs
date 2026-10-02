@@ -1,11 +1,11 @@
-/** Proxy temporário para reproduzir exatamente o pacote baixado do site no ambiente testevino. */
+/** Espelha o site oficial ODA AL VINO no ambiente de teste, preservando rotas, assets e interações. */
 const nextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
         {
           source: '/:path*',
-          destination: 'https://wwwodaalvinocom.vercel.app/:path*',
+          destination: 'https://www.odaalvino.com.br/:path*',
         },
       ],
     };
