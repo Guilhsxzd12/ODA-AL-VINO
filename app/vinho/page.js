@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import { HEADER_LOGO } from '../brand';
 import { loadCatalog, money, winePath, wineIdFromSlug } from '../catalogLoader';
 
 function CartIcon(){return <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"/></svg>}
 function MenuIcon(){return <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>}
+function CloseIcon(){return <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>}
 function Arrow(){return <span>→</span>}
 function Flag({code,name,className=''}){return code?<span className={`flag-wrap ${className}`}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`}/></span>:null}
 function Bottle({wine}){return <div className="bottle-wrap"><div className={`bottle ${wine?.tone||'blend'}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>{(wine?.name||'VINHO').slice(0,18)}</b><small>{(wine?.winery||'VIDEIRA').slice(0,18)}</small></div></div></div></div>}
@@ -14,11 +14,10 @@ function Related({w}){return <a className="wine-card related-card" href={winePat
 function Slider({children}){const ref=useRef(null);return <div ref={ref} className="horizontal-scroll product-row detail-related-row">{children}</div>}
 
 export default function WinePage(){
- const pathname=usePathname();
- const slug=decodeURIComponent((pathname||'').split('/').filter(Boolean).pop()||'');
- const id=wineIdFromSlug(slug);
+ const [slug,setSlug]=useState('');
  const [wines,setWines]=useState([]),[qty,setQty]=useState(1),[cartOpen,setCartOpen]=useState(false),[cartCount,setCartCount]=useState(0),[menuOpen,setMenuOpen]=useState(false);
- useEffect(()=>{loadCatalog().then(setWines).catch(console.error)},[]);
+ useEffect(()=>{const p=new URLSearchParams(window.location.search);setSlug(p.get('produto')||'');loadCatalog().then(setWines).catch(console.error)},[]);
+ const id=wineIdFromSlug(slug);
  const wine=useMemo(()=>wines.find(w=>String(w.id)===String(id)),[wines,id]);
  const related=useMemo(()=>wine?wines.filter(w=>w.winery===wine.winery&&w.id!==wine.id).slice(0,12):[],[wines,wine]);
  useEffect(()=>{if(wine)document.title=`${wine.name} | Videira Vinhoteca`},[wine]);
@@ -27,7 +26,7 @@ export default function WinePage(){
  const quote=()=>window.open(`https://wa.me/5545999056277?text=${encodeURIComponent(`Olá! Gostaria de pedir um orçamento para ${qty} unidade(s) de ${wine.name} — ${wine.winery}.`)}`,'_blank','noopener,noreferrer');
 
  return <>
-  <header className="floating-header"><div className="header-pill"><a className="header-logo" href="/"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a><nav><a href="/">Início</a><a href="/loja">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav><div className="header-actions"><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cartCount>0&&<span>{cartCount}</span>}</button><a className="shop-pill" href="/loja">Loja <Arrow/></a><button className="icon-btn mobile-menu-btn" onClick={()=>setMenuOpen(true)} aria-label="Abrir menu"><MenuIcon/></button></div></div></header>
+  <header className="floating-header"><div className="header-pill"><a className="header-logo" href="/"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a><nav><a href="/">Início</a><a href="/loja">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav><div className="header-actions"><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cartCount>0&&<span>{cartCount}</span>}</button><a className="shop-pill" href="/loja">Loja <Arrow/></a><button className={`icon-btn mobile-menu-btn ${menuOpen?'is-open':''}`} onClick={()=>setMenuOpen(v=>!v)} aria-label={menuOpen?'Fechar menu':'Abrir menu'}>{menuOpen?<CloseIcon/>:<MenuIcon/>}</button></div></div></header>
 
   <main className="wine-detail-page">
    <section className="wine-detail">
@@ -37,7 +36,7 @@ export default function WinePage(){
    <section className="section-shell related-section"><div className="slider-head"><div><p className="kicker dark">DA MESMA BODEGA</p><h2>Mais de {wine.winery}</h2></div><a href={`/loja?bodega=${encodeURIComponent(wine.winery)}`}>Ver todos <Arrow/></a></div>{related.length?<Slider>{related.map(w=><Related key={w.id} w={w}/>)}</Slider>:<div className="related-empty">Em breve mais rótulos desta bodega.</div>}</section>
   </main>
 
-  <aside className={`mobile-menu ${menuOpen?'open':''}`}><div className="mobile-menu-shell"><div className="mobile-menu-top"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/><div><button className="mobile-menu-cart" onClick={()=>{setMenuOpen(false);setCartOpen(true)}}><CartIcon/></button><button className="mobile-menu-close" onClick={()=>setMenuOpen(false)}>×</button></div></div><nav className="mobile-menu-links"><a href="/">Início</a><a href="/loja">Loja</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav></div></aside>{menuOpen&&<button className="menu-backdrop" onClick={()=>setMenuOpen(false)}/>}
+  <aside className={`mobile-menu ${menuOpen?'open':''}`}><div className="mobile-menu-shell"><nav className="mobile-menu-links"><a href="/">Início</a><a href="/loja">Loja</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav></div></aside>{menuOpen&&<button className="menu-backdrop" onClick={()=>setMenuOpen(false)}/>}
   <aside className={`cart-drawer ${cartOpen?'open':''}`}><button className="drawer-close" onClick={()=>setCartOpen(false)}>×</button><p className="kicker dark">SEU CARRINHO</p><h2>Minha seleção</h2><div className="cart-items"><div className="cart-item"><div><strong>{wine.name}</strong><span>{qty} unidade(s)</span></div><div><b>{money(Number(wine.price||0)*qty)}</b></div></div></div><div className="cart-total"><span>Total</span><strong>{money(Number(wine.price||0)*qty)}</strong></div><button className="checkout" onClick={quote}>Continuar no WhatsApp</button></aside>{cartOpen&&<button className="backdrop" onClick={()=>setCartOpen(false)}/>}
  </>;
 }
