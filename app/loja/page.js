@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
+import { HEADER_LOGO } from '../brand';
 
 const wines = [
   {id:1,name:'Catena Malbec',winery:'Catena Zapata',country:'Argentina',flag:'ar',grape:'Malbec',price:189.90,tone:'malbec',isNew:true},
@@ -32,11 +33,11 @@ const grapes = [
 ];
 
 const wineries = [
-  ['Catena Zapata','Argentina','🇦🇷'],
-  ['Concha y Toro','Chile','🇨🇱'],
-  ['Antinori','Itália','🇮🇹'],
-  ['Maison Rouge','França','🇫🇷'],
-  ['Rutini','Argentina','🇦🇷'],
+  ['Catena Zapata','Argentina','ar'],
+  ['Concha y Toro','Chile','cl'],
+  ['Antinori','Itália','it'],
+  ['Maison Rouge','França','fr'],
+  ['Rutini','Argentina','ar'],
 ];
 
 function money(v){return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
@@ -86,13 +87,12 @@ export default function LojaPage(){
 
   return <>
     <header className="floating-header"><div className="header-pill">
-      <a className="header-logo" href="/"><img src="/videira-logo.svg" alt="Videira Vinhoteca"/></a>
+      <a className="header-logo" href="/"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a>
       <nav><a href="/">Início</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav>
       <div className="header-actions"><button className="icon-btn search-btn"><SearchIcon/></button><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button><a className="shop-pill active" href="/loja">Loja <Arrow/></a></div>
     </div></header>
 
     <main className="shop-page">
-      <section className="shop-page-hero"><p className="kicker">CATÁLOGO COMPLETO</p><h1>Loja</h1><p>Encontre seu próximo vinho por país, uva ou bodega.</p></section>
       <section className="shop-search-wrap"><div className="shop-search"><SearchIcon/><input value={query} onChange={e=>{setQuery(e.target.value);setPage(1)}} placeholder="Pesquise por vinho, uva, país ou bodega..." aria-label="Pesquisar vinhos"/></div></section>
       <section className="shop-layout">
         <aside className="filters">
