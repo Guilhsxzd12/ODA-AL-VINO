@@ -283,3 +283,48 @@ footer{align-items:flex-start}
   .detail-photo{max-width:76%;max-height:88%}
   .detail-related-row .wine-card{min-width:72vw!important}
 }
+
+/* 2026-10 mobile/cart/hero refinements */
+.hero-product{align-items:center;padding:22px 120px 22px 20px}
+.hero-product>.wine-photo{max-height:82%;max-width:52%;mix-blend-mode:normal;filter:drop-shadow(0 18px 30px rgba(0,0,0,.18))}
+.hero-note{right:2%;bottom:50%;transform:translateY(50%);max-width:190px;z-index:4}
+.hero-note strong{font-size:22px;line-height:1.04}
+.hero-note small{line-height:1.35}
+.pagination{align-items:center}
+.pagination button:disabled{opacity:.28;cursor:not-allowed}
+.pagination .page-nav{font-size:22px;line-height:1}
+.region-card{min-width:255px;height:112px;padding:54px 18px 16px}
+.region-card strong{font-size:25px}
+.region-card .country-flag{width:38px;height:38px}
+.wine-photo{mix-blend-mode:normal;background:transparent}
+
+@media(max-width:900px){
+  .hero-product{padding:18px 90px 18px 10px}
+  .hero-note{right:0;max-width:160px}
+}
+@media(max-width:760px){
+  .hero-product{padding:0;align-items:flex-end}
+  .hero-product>.wine-photo{max-height:76%;max-width:54%}
+  .hero-note{right:12px;bottom:20px;transform:none;max-width:150px}
+  .hero-note strong{font-size:18px}
+  .regions-strip{padding-top:46px}
+  .region-card{min-width:62vw!important;max-width:245px!important;height:110px!important;padding:50px 16px 14px!important}
+  .region-card strong{font-size:24px}
+  .region-card .country-flag{width:36px;height:36px;left:14px;top:13px}
+  .cart-drawer{
+    left:12px!important;right:12px!important;top:50%!important;bottom:auto!important;
+    width:auto!important;height:auto!important;max-height:78dvh!important;
+    border-radius:24px!important;padding:26px 22px 22px!important;
+    transform:translateY(-50%) scale(.96)!important;
+    opacity:0;pointer-events:none;
+    transition:opacity .2s ease,transform .2s ease!important;
+    box-shadow:0 30px 90px rgba(20,4,13,.28)!important;
+  }
+  .cart-drawer.open{transform:translateY(-50%) scale(1)!important;opacity:1;pointer-events:auto}
+  .cart-drawer h2{font-size:34px;margin-bottom:16px}
+  .cart-items{max-height:44dvh;flex:none}
+  .cart-total{margin-top:4px}
+  .backdrop{z-index:89;background:rgba(20,4,13,.5);backdrop-filter:blur(2px)}
+  .pagination{gap:4px!important;margin-top:28px}
+  .pagination button{width:34px!important;height:34px!important;font-size:12px}
+}
