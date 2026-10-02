@@ -1,175 +1,26 @@
-@font-face{font-family:'Lato';src:url('/oda/Fonts/Lato-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'Lato';src:url('/oda/Fonts/Lato-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
-@font-face{font-family:'CCS Belvare';src:url('/oda/Fonts/ccsbelvareregular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'Luxurious Script';src:url('/oda/Fonts/LuxuriousScript-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
-
-:root{--wine:#47072c;--wine-2:#710143;--paper:#f4f0c8;--cream:#faf7df;--olive:#7a8419;--harvest:#d69b35;--ink:#2b0a1d;--line:rgba(71,7,44,.15)}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:'Lato','Segoe UI',sans-serif;background:var(--paper);color:var(--wine)}
-button,a{font:inherit}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer}
-.script-word{font-family:'Luxurious Script','CCS Belvare',serif;text-transform:none;font-weight:400}
-.eyebrow{font-size:10px;letter-spacing:.28em;font-weight:700;text-transform:uppercase;color:rgba(244,240,200,.62)}
-.eyebrow.dark{color:rgba(71,7,44,.48)}
-
-.header-shell{position:fixed;inset:0 0 auto;z-index:60;padding:8px 8px 0;pointer-events:none;transition:all .3s ease}
-.top-logo{display:flex;align-items:center;justify-content:center;pointer-events:auto;transition:all .3s ease}
-.top-logo img{width:auto;height:160px;object-fit:contain}
-.header-pill{width:100%;max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;border:1px solid rgba(244,240,200,.20);background:rgba(71,7,44,.80);border-radius:999px;box-shadow:0 20px 80px rgba(71,7,44,.30);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);transform:translateY(-115%);opacity:0;pointer-events:auto;transition:all .3s ease-out}
-.scrolled .header-pill{transform:translateY(0);opacity:1}
-.scrolled .top-logo{opacity:0;pointer-events:none;transform:translateY(-18px)}
-.brand-mini{display:flex;align-items:center;flex-shrink:0;min-width:95px}
-.brand-mini img{display:block;width:auto;height:32px;object-fit:contain}
-.header-pill nav{display:flex;align-items:center;justify-content:center;gap:4px;flex:1}
-.header-pill nav a{border-radius:999px;padding:8px 12px;color:rgba(244,240,200,.70);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;transition:all .2s ease}
-.header-pill nav a:hover{background:rgba(244,240,200,.15);color:var(--paper)}
-.cart-btn{position:relative;flex-shrink:0;border:1px solid rgba(244,240,200,.16);background:rgba(244,240,200,.08);color:var(--paper);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;transition:all .2s ease}
-.cart-btn:hover{background:var(--paper);color:var(--wine)}
-.cart-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.cart-count{position:absolute;right:-3px;top:-3px;width:18px;height:18px;border-radius:50%;background:var(--harvest);color:var(--wine);font-size:9px;font-weight:700;display:grid;place-items:center}
-
-@media(min-width:768px){
-  .header-shell{padding:24px 24px 0}
-  .top-logo img{height:80px}
-  .header-pill{gap:16px;padding:12px 24px}
-  .brand-mini{min-width:145px}
-  .brand-mini img{height:48px}
-}
-
-.hero{position:relative;min-height:100vh;background:var(--wine);overflow:hidden;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;padding:140px max(7vw,40px) 80px;color:var(--paper)}
-.hero:before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(112,1,67,.20),rgba(71,7,44,.20));pointer-events:none}
-.hero-glow{display:none}
-
-
-.hero-content{position:relative;z-index:2;max-width:680px}
-.hero h1{font-family:'CCS Belvare',Georgia,serif;font-size:clamp(58px,8vw,112px);line-height:.78;text-transform:uppercase;font-weight:400;margin:28px 0 30px;letter-spacing:-.025em}
-.hero h1 .script-word{display:inline-block;font-size:1.14em;line-height:.65;margin-left:5%}
-.hero-copy{max-width:560px;font-size:18px;line-height:1.65;color:rgba(244,240,200,.78)}
-.hero-cta{display:inline-flex;margin-top:26px;background:var(--paper);color:var(--wine);border-radius:999px;padding:15px 24px;text-transform:uppercase;font-size:11px;letter-spacing:.16em;font-weight:700}
-.hero-card-stack{position:relative;height:620px;z-index:2}
-.mini-wine-card{position:absolute;width:260px;height:430px;border-radius:180px 180px 26px 26px;background:var(--paper);border:1px solid rgba(244,240,200,.30);display:flex;align-items:flex-end;justify-content:center;box-shadow:0 35px 60px rgba(0,0,0,.18)}
-.card-1{left:20%;top:7%;transform:rotate(-8deg)}
-.card-2{right:2%;top:20%;transform:rotate(8deg)}
-.card-3{left:39%;bottom:0;transform:scale(.88)}
-
-.bottle-stage{position:relative;width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:24px}
-.bottle{position:relative;width:88px;height:300px;filter:drop-shadow(0 22px 18px rgba(0,0,0,.28))}
-.bottle-neck{position:absolute;left:31px;top:0;width:26px;height:82px;border-radius:5px 5px 0 0;background:#1f151b}
-.bottle-shoulder{position:absolute;left:13px;top:64px;width:62px;height:55px;border-radius:26px 26px 9px 9px;background:#281820}
-.bottle-body{position:absolute;left:5px;top:94px;width:78px;height:205px;border-radius:12px 12px 18px 18px;background:#2e1823;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.bottle.malbec .bottle-body,.bottle.malbec .bottle-shoulder{background:#321222}
-.bottle.cabernet .bottle-body,.bottle.cabernet .bottle-shoulder{background:#251019}
-.bottle.pinot .bottle-body,.bottle.pinot .bottle-shoulder{background:#4f1c29}
-.bottle.white .bottle-body,.bottle.white .bottle-shoulder{background:#687036}
-.bottle.blend .bottle-body,.bottle.blend .bottle-shoulder{background:#38172b}
-.bottle.gold .bottle-body,.bottle.gold .bottle-shoulder{background:#777235}
-.bottle-label{width:64px;height:88px;background:var(--paper);color:var(--wine);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:2px;text-align:center}
-.bottle-label strong{font-family:'CCS Belvare',serif;font-size:13px}
-.bottle-label span{font-size:6px;letter-spacing:.2em;margin-top:5px}
-
-.shop-section,.wineries-section{padding:120px max(6vw,28px);background:var(--paper)}
-.section-heading{max-width:1320px;margin:0 auto 56px;display:flex;justify-content:space-between;gap:40px;align-items:flex-end}
-.section-heading h2{font-family:'CCS Belvare',Georgia,serif;font-size:clamp(48px,6vw,82px);line-height:.86;font-weight:400;text-transform:uppercase;margin:10px 0 0}
-.section-heading h2 .script-word{font-size:1.08em}
-.section-copy{max-width:430px;line-height:1.7;color:rgba(71,7,44,.62);margin:0}
-.product-grid{max-width:1320px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.product-card{background:#fffdf0;border:1px solid rgba(71,7,44,.09);border-radius:22px;overflow:hidden;transition:.28s ease}
-.product-card:hover{transform:translateY(-7px);box-shadow:0 22px 60px rgba(71,7,44,.12)}
-.product-visual{height:390px;background:linear-gradient(145deg,#eee9c3,#f9f5dc);position:relative;overflow:hidden}
-.product-visual:after{content:'';position:absolute;width:260px;height:260px;border-radius:50%;border:1px solid rgba(71,7,44,.09);left:50%;top:50%;transform:translate(-50%,-50%)}
-.product-visual .bottle-stage{z-index:1}
-.product-visual .bottle{transform:scale(.88);transform-origin:bottom}
-.region-tag{position:absolute;left:18px;top:18px;z-index:2;border:1px solid rgba(71,7,44,.17);border-radius:999px;padding:7px 11px;font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
-.product-info{padding:24px}
-.product-winery{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(71,7,44,.45);font-weight:700;margin:0 0 8px}
-.product-info h3{font-family:'CCS Belvare',Georgia,serif;text-transform:uppercase;font-weight:400;font-size:28px;margin:0}
-.product-grape{font-size:13px;color:rgba(71,7,44,.55);margin:6px 0 25px}
-.product-bottom{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:18px}
-.product-bottom strong{font-size:18px}
-.product-bottom button{border:0;background:var(--wine);color:var(--paper);border-radius:999px;padding:10px 15px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
-
-.grapes-section{background:var(--wine);color:var(--paper);padding:120px max(6vw,28px);position:relative;overflow:hidden}
-.grapes-section:after{content:'';position:absolute;width:620px;height:620px;border:1px solid rgba(244,240,200,.08);border-radius:50%;right:-220px;top:-140px}
-.section-heading.light{position:relative;z-index:1}
-.grape-grid{max-width:1320px;margin:auto;border-top:1px solid rgba(244,240,200,.18);position:relative;z-index:1}
-.grape-card{display:grid;grid-template-columns:70px 1fr 50px;align-items:center;padding:28px 4px;border-bottom:1px solid rgba(244,240,200,.18);transition:.25s}
-.grape-card:hover{padding-left:16px;background:rgba(244,240,200,.04)}
-.grape-number{font-size:10px;letter-spacing:.14em;color:rgba(244,240,200,.45)}
-.grape-card h3{font-family:'CCS Belvare',serif;font-size:clamp(30px,4vw,48px);font-weight:400;text-transform:uppercase;margin:0}
-.grape-card p{margin:5px 0 0;color:rgba(244,240,200,.56)}
-.grape-card .arrow{font-size:24px;color:var(--harvest)}
-
-.winery-list{max-width:1320px;margin:auto;border-top:1px solid var(--line)}
-.winery-list a{display:grid;grid-template-columns:70px 1fr auto;align-items:center;padding:27px 5px;border-bottom:1px solid var(--line);transition:.2s}
-.winery-list a:hover{padding-left:15px;background:rgba(71,7,44,.025)}
-.winery-list span{font-size:10px;color:rgba(71,7,44,.4)}
-.winery-list strong{font-family:'CCS Belvare',serif;font-size:34px;text-transform:uppercase;font-weight:400}
-.winery-list em{font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.13em;font-weight:700}
-
-footer{background:#2c061d;color:var(--paper);padding:60px max(6vw,28px);display:flex;justify-content:space-between;gap:40px;align-items:flex-end}
-footer img{height:68px;width:auto}
-footer p{color:rgba(244,240,200,.55)}
-.footer-links{display:flex;flex-direction:column;gap:10px;align-items:flex-end;font-size:12px;color:rgba(244,240,200,.7)}
-.whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:40;width:58px;height:58px;border-radius:50%;background:#25d366;color:white;display:grid;place-items:center;font-size:12px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.22)}
-
-.age-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:100;display:grid;place-items:center;padding:20px}
-.age-card{width:min(460px,100%);background:var(--wine);color:var(--paper);text-align:center;border-radius:18px;padding:36px 30px;box-shadow:0 30px 90px rgba(0,0,0,.4)}
-.age-card h2{font-family:'CCS Belvare',serif;font-size:40px;letter-spacing:.03em;margin:20px 0 0}
-.age-card .script-word{font-size:45px;line-height:.8;color:var(--harvest)}
-.age-question{font-size:19px;margin-top:28px}
-.age-copy{font-size:13px;line-height:1.65;color:rgba(244,240,200,.7)}
-.age-actions{display:flex;gap:10px;margin-top:25px}
-.btn{flex:1;padding:13px;border-radius:10px;font-weight:700;border:1px solid rgba(244,240,200,.35)}
-.btn.harvest{background:var(--harvest);color:var(--wine);border-color:var(--harvest)}
-.btn.outline{background:transparent;color:var(--paper)}
-
-.cart-drawer{position:fixed;z-index:90;right:0;top:0;width:min(470px,94vw);height:100vh;background:var(--cream);transform:translateX(105%);transition:.32s ease;padding:36px;display:flex;flex-direction:column;box-shadow:-30px 0 80px rgba(0,0,0,.18)}
-.cart-drawer.open{transform:translateX(0)}
-.drawer-close{position:absolute;right:22px;top:18px;border:0;background:none;color:var(--wine);font-size:32px}
-.cart-drawer h2{font-family:'CCS Belvare',serif;text-transform:uppercase;font-size:42px;font-weight:400;margin:10px 0 25px}
-.cart-items{flex:1;overflow:auto;border-top:1px solid var(--line)}
-.empty-cart{color:rgba(71,7,44,.55);padding:24px 0}
-.cart-item{display:flex;justify-content:space-between;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}
-.cart-item>div{display:flex;flex-direction:column;gap:5px}
-.cart-item>div:last-child{text-align:right}
-.cart-item span{font-size:12px;color:rgba(71,7,44,.52)}
-.cart-item button{background:none;border:0;color:rgba(71,7,44,.55);text-decoration:underline;padding:0}
-.cart-total{display:flex;justify-content:space-between;padding:20px 0;font-size:18px;border-top:1px solid var(--line)}
-.checkout-btn{border:0;background:var(--wine);color:var(--paper);padding:16px;border-radius:999px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-.checkout-btn:disabled{opacity:.4;cursor:not-allowed}
-.drawer-backdrop{position:fixed;inset:0;z-index:80;border:0;background:rgba(0,0,0,.38)}
-
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr;padding:140px 24px 60px;min-height:auto}
-  .hero-card-stack{height:430px;margin-top:25px}
-  .mini-wine-card{width:180px;height:315px}
-  .card-1{left:2%}.card-2{right:1%}.card-3{left:34%}
-  .bottle{transform:scale(.72);transform-origin:bottom}
-  .product-grid{grid-template-columns:repeat(2,1fr)}
-  .section-heading{align-items:flex-start;flex-direction:column}
-}
-@media(max-width:640px){
-  .header-shell{padding:8px 8px 0}
-  .top-logo img{height:112px}
-  .header-pill{padding:8px 10px;gap:6px}
-  .brand-mini{min-width:58px;width:58px}
-  .brand-mini img{height:30px;max-width:58px}
-  .header-pill nav{gap:0}
-  .header-pill nav a{padding:8px 7px;font-size:8px;letter-spacing:.08em}
-  .cart-btn{width:38px;height:38px}
-  .hero h1{font-size:58px}
-  .hero-copy{font-size:15px}
-  .hero-card-stack{height:330px}
-  .mini-wine-card{width:138px;height:245px}
-  .product-grid{grid-template-columns:1fr}
-  .product-visual{height:350px}
-  .shop-section,.wineries-section,.grapes-section{padding:85px 20px}
-  .section-heading h2{font-size:48px}
-  .grape-card{grid-template-columns:45px 1fr 24px}
-  .winery-list a{grid-template-columns:45px 1fr}.winery-list em{display:none}
-  .winery-list strong{font-size:27px}
-  footer{flex-direction:column;align-items:flex-start}
-  .footer-links{align-items:flex-start}
-}
+@font-face{font-family:Lato;src:url('/oda/Fonts/Lato-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:Lato;src:url('/oda/Fonts/Lato-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+@font-face{font-family:'CCS Belvare';src:url('/oda/Fonts/ccsbelvareregular.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Luxurious Script';src:url('/oda/Fonts/LuxuriousScript-Regular.ttf') format('truetype');font-display:swap}
+:root{--wine:#47072c;--wine2:#710143;--paper:#f4f0c8;--cream:#fbf8e8;--olive:#7a8419;--gold:#d69b35;--ink:#2e1021;--muted:#7a6b70;--line:rgba(71,7,44,.12)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--wine);font-family:Lato,Arial,sans-serif}a{text-decoration:none;color:inherit}button{font:inherit;cursor:pointer}
+.kicker{font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(244,240,200,.68);margin:0}.kicker.dark{color:rgba(71,7,44,.46)}
+.floating-header{position:fixed;top:18px;left:0;right:0;z-index:70;padding:0 18px;pointer-events:none}
+.header-pill{pointer-events:auto;max-width:1180px;margin:auto;height:66px;padding:8px 14px 8px 18px;border-radius:999px;border:1px solid rgba(244,240,200,.42);background:rgba(71,7,44,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 55px rgba(40,0,22,.28);display:flex;align-items:center;gap:24px}
+.header-logo{display:flex;align-items:center;min-width:180px}.header-logo img{height:46px;width:auto;display:block}
+.header-pill nav{display:flex;align-items:center;justify-content:center;gap:5px;flex:1}.header-pill nav a{color:rgba(244,240,200,.78);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:10px 14px;border-radius:999px;transition:.2s}.header-pill nav a:hover{background:rgba(244,240,200,.12);color:var(--paper)}
+.header-actions{display:flex;gap:4px}.icon-btn{position:relative;width:42px;height:42px;border:0;background:transparent;color:var(--paper);border-radius:50%;display:grid;place-items:center;transition:.2s}.icon-btn:hover{background:rgba(244,240,200,.12)}.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.cart-icon span{position:absolute;right:0;top:0;width:17px;height:17px;border-radius:50%;background:var(--gold);color:var(--wine);font-size:9px;font-weight:700;display:grid;place-items:center}
+.hero-clean{min-height:620px;padding:145px max(7vw,36px) 70px;background:var(--wine);color:var(--paper);display:grid;grid-template-columns:1.1fr .9fr;align-items:center;overflow:hidden;position:relative}.hero-clean:after{content:'';position:absolute;right:-10%;top:-25%;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(112,1,67,.85),rgba(71,7,44,0) 70%)}.hero-text{position:relative;z-index:2;max-width:690px}.hero-text h1{font-family:'CCS Belvare',Georgia,serif;text-transform:none;font-weight:400;font-size:clamp(56px,7vw,96px);line-height:.95;letter-spacing:-.02em;margin:24px 0}.hero-text>p:not(.kicker){max-width:560px;font-size:17px;line-height:1.7;color:rgba(244,240,200,.75)}.primary-btn,.secondary-btn{display:inline-flex;align-items:center;gap:16px;border-radius:999px;padding:14px 20px;margin-top:22px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}.primary-btn{background:var(--paper);color:var(--wine)}.secondary-btn{border:1px solid rgba(244,240,200,.5);color:var(--paper)}
+.hero-product{position:relative;z-index:2;height:430px;display:flex;align-items:flex-end;justify-content:center}.hero-product:before{content:'';position:absolute;bottom:20px;width:310px;height:310px;border-radius:50%;border:1px solid rgba(244,240,200,.13)}.hero-note{position:absolute;right:8%;bottom:40px;display:flex;flex-direction:column;gap:3px;color:var(--paper)}.hero-note span{font-size:9px;letter-spacing:.16em;color:rgba(244,240,200,.5)}.hero-note strong{font-family:'CCS Belvare',serif;font-size:24px;font-weight:400}.hero-note small{color:rgba(244,240,200,.58)}
+.section-shell{max-width:1400px;margin:0 auto;padding:74px max(4vw,24px)}.regions-strip{padding-top:36px;padding-bottom:30px}.slider-head{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;margin-bottom:24px}.slider-head h2{font-family:'CCS Belvare',Georgia,serif;font-size:42px;font-weight:400;margin:6px 0 0}.slider-head>a{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;display:flex;gap:10px;align-items:center}
+.horizontal-scroll{display:flex;gap:14px;overflow-x:auto;padding:2px 2px 14px;scroll-snap-type:x proximity;scrollbar-width:none}.horizontal-scroll::-webkit-scrollbar{display:none}
+.region-card{scroll-snap-align:start;min-width:285px;height:130px;border-radius:18px;overflow:hidden;padding:22px;display:flex;align-items:flex-end;justify-content:space-between;color:var(--paper);background:linear-gradient(135deg,var(--wine),var(--wine2));position:relative}.region-card:before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(214,155,53,.16),transparent 55%)}.region-card>div,.region-card>span{position:relative;z-index:1}.region-card strong{font-family:'CCS Belvare',serif;font-size:28px;font-weight:400;display:block}.region-card small,.region-card span{font-size:11px}.region-card div>span{display:block;color:rgba(244,240,200,.6);margin-top:5px}
+.product-row{gap:16px}.wine-card{scroll-snap-align:start;min-width:250px;background:#fffdf2;border:1px solid rgba(71,7,44,.08);border-radius:18px;padding:14px;position:relative;transition:.25s}.wine-card:hover{transform:translateY(-5px);box-shadow:0 18px 45px rgba(71,7,44,.09)}.heart{position:absolute;right:14px;top:12px;border:0;background:transparent;font-size:22px;color:rgba(71,7,44,.48);z-index:3}.wine-image{height:285px;background:#f1ecd2;border-radius:14px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}.wine-meta{padding:16px 5px 4px}.wine-meta small{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:rgba(71,7,44,.42)}.wine-meta h3{font-family:'CCS Belvare',serif;font-size:23px;font-weight:400;margin:7px 0 3px;line-height:1.05}.wine-meta p{font-size:12px;margin:0;color:rgba(71,7,44,.6)}.wine-meta>span{display:block;font-size:11px;margin-top:4px;color:rgba(71,7,44,.45)}.price-line{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}.price-line strong{font-size:17px}.price-line button{width:36px;height:36px;border-radius:50%;border:0;background:var(--wine);color:var(--paper);display:grid;place-items:center}.price-line svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.grape-tile,.winery-card{scroll-snap-align:start;min-width:245px;height:150px;border-radius:18px;padding:20px;display:flex;align-items:flex-end;justify-content:space-between;color:var(--paper);background:var(--wine);position:relative;overflow:hidden}.grape-tile:before,.winery-card:before{content:'';position:absolute;width:180px;height:180px;border-radius:50%;right:-35px;top:-55px;background:rgba(244,240,200,.08)}.grape-tile>div,.grape-tile>span,.winery-card>div,.winery-card>span{position:relative;z-index:1}.grape-tile strong,.winery-card strong{display:block;font-family:'CCS Belvare',serif;font-size:24px;font-weight:400}.grape-tile div>span,.winery-card div>span{display:block;font-size:11px;color:rgba(244,240,200,.58);margin-top:4px}.winery-card{min-width:290px;background:linear-gradient(135deg,#6b103f,#35051f)}
+.story-banner{margin-bottom:70px}.story-banner>div{min-height:280px;border-radius:24px;background:linear-gradient(120deg,var(--wine),#2b061b);color:var(--paper);padding:46px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}.story-banner>div:after{content:'';position:absolute;width:420px;height:420px;border-radius:50%;right:-90px;top:-80px;background:radial-gradient(circle,rgba(214,155,53,.22),transparent 65%)}.story-banner h2{font-family:'CCS Belvare',serif;font-size:48px;font-weight:400;max-width:520px;margin:12px 0}.story-banner p:not(.kicker){color:rgba(244,240,200,.68);max-width:430px}
+footer{background:#2b061b;color:var(--paper);padding:54px max(6vw,28px);display:grid;grid-template-columns:1fr auto 1fr;gap:28px;align-items:end}.footer-brand img{height:64px}.footer-brand p{font-size:12px;color:rgba(244,240,200,.5)}.footer-center{display:flex;gap:24px;font-size:11px}.footer-contact{display:flex;flex-direction:column;align-items:flex-end;gap:7px;font-size:11px;color:rgba(244,240,200,.65)}
+.whatsapp-float{position:fixed;right:22px;bottom:22px;z-index:55;width:56px;height:56px;border-radius:50%;background:#25d366;color:white;display:grid;place-items:center;font-weight:700;font-size:12px;box-shadow:0 12px 30px rgba(0,0,0,.22)}
+.bottle-wrap{height:100%;width:100%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px}.bottle{position:relative;width:80px;height:255px;filter:drop-shadow(0 18px 16px rgba(0,0,0,.2))}.neck{position:absolute;left:29px;top:0;width:22px;height:70px;background:#1e1519;border-radius:4px 4px 0 0}.shoulder{position:absolute;left:13px;top:54px;width:54px;height:46px;background:#2b1820;border-radius:22px 22px 8px 8px}.body{position:absolute;left:6px;top:80px;width:68px;height:175px;background:#321522;border-radius:10px 10px 14px 14px;display:grid;place-items:center}.bottle.cabernet .shoulder,.bottle.cabernet .body{background:#241015}.bottle.pinot .shoulder,.bottle.pinot .body{background:#4b1c29}.bottle.blend .shoulder,.bottle.blend .body{background:#3b1928}.bottle.gold .shoulder,.bottle.gold .body{background:#6d6a3b}.label{width:52px;height:66px;background:var(--paper);color:var(--wine);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.label b{font-family:'CCS Belvare',serif;font-size:11px}.label small{font-size:5px;letter-spacing:.14em;margin-top:4px}
+.cart-drawer{position:fixed;right:0;top:0;z-index:90;width:min(450px,94vw);height:100vh;background:var(--cream);padding:34px;transform:translateX(105%);transition:.3s;display:flex;flex-direction:column;box-shadow:-30px 0 80px rgba(0,0,0,.18)}.cart-drawer.open{transform:translateX(0)}.drawer-close{position:absolute;right:20px;top:14px;border:0;background:none;font-size:30px;color:var(--wine)}.cart-drawer h2{font-family:'CCS Belvare',serif;font-size:40px;font-weight:400;margin:10px 0 22px}.cart-items{flex:1;overflow:auto;border-top:1px solid var(--line)}.empty{color:rgba(71,7,44,.5);padding-top:20px}.cart-item{display:flex;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}.cart-item>div{display:flex;flex-direction:column;gap:4px}.cart-item>div:last-child{text-align:right}.cart-item span{font-size:11px;color:rgba(71,7,44,.5)}.cart-item button{border:0;background:none;padding:0;text-decoration:underline;color:rgba(71,7,44,.55)}.cart-total{display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid var(--line)}.checkout{border:0;border-radius:999px;background:var(--wine);color:var(--paper);padding:15px;text-transform:uppercase;font-size:10px;letter-spacing:.1em;font-weight:700}.checkout:disabled{opacity:.4}.backdrop{position:fixed;inset:0;z-index:80;border:0;background:rgba(0,0,0,.35)}
+@media(max-width:900px){.header-logo{min-width:110px}.header-pill nav a{padding:9px 8px;font-size:9px}.hero-clean{grid-template-columns:1fr;min-height:auto;padding:130px 24px 50px}.hero-product{height:320px}.hero-note{right:2%}footer{grid-template-columns:1fr}.footer-center{flex-wrap:wrap}.footer-contact{align-items:flex-start}}
+@media(max-width:640px){.floating-header{top:8px;padding:0 8px}.header-pill{height:58px;padding:7px 9px 7px 12px;gap:8px}.header-logo{min-width:60px;width:60px}.header-logo img{height:34px;max-width:60px;object-fit:contain}.header-pill nav{gap:0}.header-pill nav a:nth-child(2){display:none}.header-pill nav a{font-size:8px;padding:8px 6px;letter-spacing:.06em}.icon-btn{width:34px;height:34px}.header-actions .icon-btn:first-child{display:none}.hero-text h1{font-size:52px}.hero-text>p:not(.kicker){font-size:15px}.hero-product{height:260px}.hero-note{display:none}.section-shell{padding:55px 18px}.slider-head h2{font-size:34px}.slider-head>a{display:none}.region-card{min-width:235px;height:115px}.wine-card{min-width:220px}.wine-image{height:245px}.grape-tile{min-width:215px}.story-banner>div{padding:32px 24px}.story-banner h2{font-size:38px}footer{padding:44px 22px}.footer-center{gap:14px}}
