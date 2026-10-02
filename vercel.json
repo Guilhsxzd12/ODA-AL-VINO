@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "https://wwwodaalvinocom.vercel.app/$1"
+    }
+  ]
+}
