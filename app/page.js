@@ -1,199 +1,45 @@
 'use client';
-import { useMemo, useRef, useState } from 'react';
-import { HEADER_LOGO, FOOTER_LOGO } from './brand';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { HEADER_LOGO } from './brand';
+import { loadCatalog, money } from './catalogLoader';
 
-const wines = [
-  {id:1,name:'Catena Malbec',winery:'Catena Zapata',country:'Argentina',flag:'ar',grape:'Malbec',price:189.90,tone:'malbec',isNew:true},
-  {id:2,name:'Marques de Casa Concha',winery:'Concha y Toro',country:'Chile',flag:'cl',grape:'Cabernet Sauvignon',price:259.90,tone:'cabernet',isNew:true},
-  {id:3,name:'Brunello di Montalcino',winery:'Antinori',country:'Itália',flag:'it',grape:'Sangiovese',price:429.90,tone:'blend',isNew:false},
-  {id:4,name:'Pinot Noir Reserva',winery:'Patagonia Select',country:'Argentina',flag:'ar',grape:'Pinot Noir',price:219.90,tone:'pinot',isNew:false},
-  {id:5,name:'Chardonnay Gran Reserva',winery:'Casa del Valle',country:'Chile',flag:'cl',grape:'Chardonnay',price:169.90,tone:'gold',isNew:true},
-  {id:6,name:'Bordeaux Supérieur',winery:'Maison Rouge',country:'França',flag:'fr',grape:'Blend',price:329.90,tone:'cabernet',isNew:false},
-  {id:7,name:'Malbec Adrianna Vineyard',winery:'Catena Zapata',country:'Argentina',flag:'ar',grape:'Malbec',price:399.90,tone:'malbec',isNew:true},
-  {id:8,name:'Malbec Estate',winery:'Rutini',country:'Argentina',flag:'ar',grape:'Malbec',price:279.90,tone:'blend',isNew:false},
-  {id:9,name:'Gran Reserva Malbec',winery:'Luigi Bosca',country:'Argentina',flag:'ar',grape:'Malbec',price:249.90,tone:'malbec',isNew:true},
-  {id:10,name:'Cabernet Franc',winery:'Salentein',country:'Argentina',flag:'ar',grape:'Cabernet Franc',price:229.90,tone:'cabernet',isNew:false},
-  {id:11,name:'Sauvignon Blanc',winery:'Concha y Toro',country:'Chile',flag:'cl',grape:'Sauvignon Blanc',price:129.90,tone:'gold',isNew:true},
-  {id:12,name:'Chianti Classico',winery:'Antinori',country:'Itália',flag:'it',grape:'Sangiovese',price:289.90,tone:'blend',isNew:false},
-];
-
-const regions = [
-  {name:'Argentina',flag:'ar',sub:'Mendoza · Salta · Patagônia'},
-  {name:'Chile',flag:'cl',sub:'Maipo · Colchagua · Casablanca'},
-  {name:'Itália',flag:'it',sub:'Toscana · Piemonte · Veneto'},
-  {name:'França',flag:'fr',sub:'Bordeaux · Borgonha · Rhône'},
-];
-
-const grapes = [
-  ['Malbec','Macio e frutado'],
-  ['Cabernet Sauvignon','Estruturado e intenso'],
-  ['Pinot Noir','Delicado e fresco'],
-  ['Chardonnay','Elegante e versátil'],
-  ['Sauvignon Blanc','Cítrico e vibrante'],
-];
-
-const wineries = [
-  ['Catena Zapata','Argentina','ar'],
-  ['Concha y Toro','Chile','cl'],
-  ['Antinori','Itália','it'],
-  ['Maison Rouge','França','fr'],
-  ['Rutini','Argentina','ar'],
-];
-
-function money(v){return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
 function CartIcon(){return <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"/></svg>}
 function SearchIcon(){return <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>}
 function Arrow(){return <span aria-hidden="true">→</span>}
 function InstagramIcon(){return <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>}
 function WhatsIcon(){return <img className="social-icon-img" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="" draggable="false"/>}
-function Flag({code,name,className=''}){return <span className={`flag-wrap ${className}`} title={name}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`} draggable="false"/></span>}
-function DragSlider({children,className=''}) {
-  const ref=useRef(null);
-  const state=useRef({down:false,startX:0,lastX:0,left:0,dragged:false,pointerId:null});
-  const down=(e)=>{
-    if(e.button!==undefined && e.button!==0) return;
-    const el=ref.current;if(!el)return;
-    state.current={down:true,startX:e.clientX,lastX:e.clientX,left:el.scrollLeft,dragged:false,pointerId:e.pointerId};
-  };
-  const move=(e)=>{
-    const el=ref.current;if(!el||!state.current.down)return;
-    const dx=e.clientX-state.current.startX;
-    if(!state.current.dragged && Math.abs(dx)>8){
-      state.current.dragged=true;
-      el.classList.add('dragging');
-      try{el.setPointerCapture?.(e.pointerId)}catch{}
-    }
-    if(state.current.dragged){
-      e.preventDefault();
-      el.scrollLeft=state.current.left-dx;
-      state.current.lastX=e.clientX;
-    }
-  };
-  const end=(e)=>{
-    const el=ref.current;if(!el)return;
-    state.current.down=false;
-    el.classList.remove('dragging');
-    if(state.current.dragged){try{el.releasePointerCapture?.(e.pointerId)}catch{}}
-  };
-  const click=(e)=>{
-    if(state.current.dragged){
-      e.preventDefault();
-      e.stopPropagation();
-      state.current.dragged=false;
-    }
-  };
-  return <div ref={ref} className={`horizontal-scroll drag-slider ${className}`} onPointerDown={down} onPointerMove={move} onPointerUp={end} onPointerCancel={end} onClickCapture={click}>{children}</div>
-}
-function Bottle({tone='malbec'}){return <div className="bottle-wrap"><div className={`bottle ${tone}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>VIDEIRA</b><small>VINHOTECA</small></div></div></div></div>}
-function ProductCard({w,onAdd}){return <article className="wine-card">
-  <Flag code={w.flag} name={w.country} className="origin-flag"/>
-  <a className="wine-card-link" href={`/vinho/${w.id}`} aria-label={`Ver ${w.name}`}>
-    <div className="wine-image"><Bottle tone={w.tone}/></div>
-    <div className="wine-meta">
-      <small>{w.country}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grape}</span>
-    </div>
-  </a>
-  <div className="price-line"><strong>{money(w.price)}</strong><button onClick={(e)=>{e.preventDefault();e.stopPropagation();onAdd(w)}} aria-label={`Adicionar ${w.name}`}><CartIcon/></button></div>
-</article>}
+function Flag({code,name,className=''}){return code?<span className={`flag-wrap ${className}`} title={name}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`} draggable="false"/></span>:null}
+function Bottle({wine}){return <div className="bottle-wrap"><div className={`bottle ${wine?.tone||'blend'}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>{(wine?.name||'VINHO').slice(0,18)}</b><small>{(wine?.winery||'VIDEIRA').slice(0,18)}</small></div></div></div></div>}
+function DragSlider({children,className=''}){const ref=useRef(null);const st=useRef({down:false,x:0,left:0,drag:false});const down=e=>{if(e.button!==undefined&&e.button!==0)return;const el=ref.current;if(!el)return;st.current={down:true,x:e.clientX,left:el.scrollLeft,drag:false}};const move=e=>{const el=ref.current;if(!el||!st.current.down)return;const dx=e.clientX-st.current.x;if(!st.current.drag&&Math.abs(dx)>8){st.current.drag=true;el.classList.add('dragging');try{el.setPointerCapture?.(e.pointerId)}catch{}}if(st.current.drag){e.preventDefault();el.scrollLeft=st.current.left-dx}};const end=e=>{const el=ref.current;if(!el)return;st.current.down=false;el.classList.remove('dragging');if(st.current.drag){try{el.releasePointerCapture?.(e.pointerId)}catch{}}};const click=e=>{if(st.current.drag){e.preventDefault();e.stopPropagation();st.current.drag=false}};return <div ref={ref} className={`horizontal-scroll drag-slider ${className}`} onPointerDown={down} onPointerMove={move} onPointerUp={end} onPointerCancel={end} onClickCapture={click}>{children}</div>}
+function ProductCard({w,onAdd}){return <article className="wine-card"><Flag code={w.flag} name={w.country} className="origin-flag"/><a className="wine-card-link" href={`/vinho/${encodeURIComponent(w.id)}`}><div className="wine-image"><Bottle wine={w}/></div><div className="wine-meta"><small>{w.country||'Vinho'}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grape||w.type||''}</span></div></a><div className="price-line"><strong>{money(w.price)}</strong><button onClick={e=>{e.preventDefault();e.stopPropagation();onAdd(w)}} aria-label={`Adicionar ${w.name}`}><CartIcon/></button></div></article>}
 
 export default function Page(){
-  const [cart,setCart]=useState([]);
-  const [cartOpen,setCartOpen]=useState(false);
-  const [headerSearchOpen,setHeaderSearchOpen]=useState(false);
-  const [headerQuery,setHeaderQuery]=useState('');
-  const total=useMemo(()=>cart.reduce((s,p)=>s+p.price,0),[cart]);
-  const add=(p)=>setCart(v=>[...v,p]);
-  const remove=(i)=>setCart(v=>v.filter((_,idx)=>idx!==i));
-  const checkout=()=>{const lines=cart.map(p=>`• ${p.name} — ${money(p.price)}`).join('\n');const msg=encodeURIComponent(`Olá! Quero consultar estes vinhos da Videira Vinhoteca:\n\n${lines}\n\nTotal: ${money(total)}`);window.open(`https://wa.me/5545999056277?text=${msg}`,'_blank','noopener,noreferrer')};
-  const submitHeaderSearch=()=>{const q=headerQuery.trim();if(!headerSearchOpen){setHeaderSearchOpen(true);return;}if(q)window.location.href=`/loja?q=${encodeURIComponent(q)}`;};
+ const [wines,setWines]=useState([]),[cart,setCart]=useState([]),[cartOpen,setCartOpen]=useState(false),[searchOpen,setSearchOpen]=useState(false),[query,setQuery]=useState('');
+ useEffect(()=>{loadCatalog().then(setWines).catch(console.error)},[]);
+ const total=useMemo(()=>cart.reduce((s,p)=>s+Number(p.price||0),0),[cart]);
+ const add=p=>setCart(v=>[...v,p]); const remove=i=>setCart(v=>v.filter((_,x)=>x!==i));
+ const checkout=()=>{const lines=cart.map(p=>`• ${p.name} — ${money(p.price)}`).join('\n');window.open(`https://wa.me/5545999056277?text=${encodeURIComponent(`Olá! Quero consultar estes vinhos da Videira Vinhoteca:\n\n${lines}\n\nTotal: ${money(total)}`)}`,'_blank','noopener,noreferrer')};
+ const doSearch=()=>{if(!searchOpen){setSearchOpen(true);return}if(query.trim())location.href=`/loja?q=${encodeURIComponent(query.trim())}`};
+ const countries=useMemo(()=>{const order=['Brasil','Argentina','Chile','França','Itália','Espanha','Portugal','África do Sul','Uruguai','Estados Unidos','Alemanha'];const map=new Map();wines.forEach(w=>w.country&&map.set(w.country,w.flag));return [...map].sort((a,b)=>{const ia=order.indexOf(a[0]),ib=order.indexOf(b[0]);return (ia<0?99:ia)-(ib<0?99:ib)}).slice(0,10)},[wines]);
+ const grapes=useMemo(()=>{const pref=['Malbec','Cabernet Sauvignon','Chardonnay','Sauvignon Blanc','Pinot Noir','Merlot','Carménère','Tannat','Syrah'];return pref.filter(g=>wines.some(w=>(w.grape||'').toLowerCase().includes(g.toLowerCase()))).slice(0,7)},[wines]);
+ const wineries=useMemo(()=>{const m={};wines.forEach(w=>{if(w.winery)m[w.winery]=(m[w.winery]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,8)},[wines]);
+ const featured=wines.slice(0,10), newOnes=wines.slice(-10).reverse(), malbecs=wines.filter(w=>(w.grape+' '+w.name).toLowerCase().includes('malbec')).slice(0,10);
 
-  const malbecs=wines.filter(w=>w.grape==='Malbec');
-  const novidades=wines.filter(w=>w.isNew);
-
-  return <>
-    <header className="floating-header"><div className="header-pill">
-      <a className="header-logo" href="#inicio"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a>
-      <nav><a className="active" href="#inicio">Início</a><a href="#vinhos">Vinhos</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a><a href="#sobre">Sobre nós</a><a href="#faq">FAQ</a></nav>
-      <div className="header-actions">
-        <div className={`header-search ${headerSearchOpen?'open':''}`}>
-          {headerSearchOpen&&<input autoFocus value={headerQuery} onChange={e=>setHeaderQuery(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')submitHeaderSearch();if(e.key==='Escape')setHeaderSearchOpen(false)}} placeholder="Buscar vinho..." aria-label="Buscar vinho"/>}
-          <button className="icon-btn search-btn" onClick={submitHeaderSearch} aria-label="Buscar"><SearchIcon/></button>
-        </div>
-        <button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)} aria-label="Abrir carrinho"><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button>
-        <a className="shop-pill" href="/loja">Loja <Arrow/></a>
-      </div>
-    </div></header>
-
-    <main>
-      <section id="inicio" className="hero-clean">
-        <div className="hero-text"><p className="kicker">CURADORIA DE VINHOS</p><h1>Grandes vinhos,<br/>bons momentos.</h1><p>Uma seleção de rótulos do mundo todo, escolhidos para quem gosta de descobrir novas histórias em cada taça.</p><a className="primary-btn" href="/loja">Ver catálogo <Arrow/></a></div>
-        <div className="hero-product"><Bottle tone="malbec"/><div className="hero-note"><span>DESTAQUE</span><strong>Malbec Reserva</strong><small>Mendoza · Argentina</small></div></div>
-      </section>
-
-      <section className="regions-strip section-shell">
-        <div className="slider-head"><h2>Explore por país</h2><a href="/loja">Ver todos <Arrow/></a></div>
-        <DragSlider className="compact">
-          {regions.map((r,i)=><a href={`/loja?pais=${encodeURIComponent(r.name)}`} className={`region-card region-${i+1}`} key={r.name}><Flag code={r.flag} name={r.name} className="country-flag"/><div><strong>{r.name}</strong><span>{r.sub}</span></div><Arrow/></a>)}
-        </DragSlider>
-      </section>
-
-      <section id="vinhos" className="section-shell products-section">
-        <div className="slider-head"><div><p className="kicker dark">NOSSA SELEÇÃO</p><h2>Vinhos em destaque</h2></div><a href="/loja">Ver todos <Arrow/></a></div>
-        <DragSlider className="product-row">{wines.slice(0,8).map(w=><ProductCard w={w} onAdd={add} key={w.id}/>)}</DragSlider>
-      </section>
-
-      <section className="section-shell products-section">
-        <div className="slider-head"><div><p className="kicker dark">RECÉM-CHEGADOS</p><h2>Novidades</h2></div><a href="/loja?novidades=1">Ver todas <Arrow/></a></div>
-        <DragSlider className="product-row">{novidades.map(w=><ProductCard w={w} onAdd={add} key={w.id}/>)}</DragSlider>
-      </section>
-
-      <section className="section-shell products-section">
-        <div className="slider-head"><div><p className="kicker dark">UMA UVA, MUITOS ESTILOS</p><h2>Malbecs</h2></div><a href="/loja?uva=Malbec">Ver todos <Arrow/></a></div>
-        <DragSlider className="product-row">{malbecs.map(w=><ProductCard w={w} onAdd={add} key={w.id}/>)}</DragSlider>
-      </section>
-
-      <section id="uvas" className="section-shell">
-        <div className="slider-head"><div><p className="kicker dark">DESCUBRA SEU ESTILO</p><h2>Por uva</h2></div><a href="/loja">Ver todas <Arrow/></a></div>
-        <DragSlider className="grape-row">{grapes.map(([name,desc],i)=><a href={`/loja?uva=${encodeURIComponent(name)}`} className={`grape-tile grape-${i+1}`} key={name}><div><strong>{name}</strong><span>{desc}</span></div><Arrow/></a>)}</DragSlider>
-      </section>
-
-      <section id="bodegas" className="section-shell">
-        <div className="slider-head"><div><p className="kicker dark">PRODUTORES</p><h2>Bodegas em destaque</h2></div><a href="/loja">Ver todas <Arrow/></a></div>
-        <DragSlider className="winery-row">{wineries.map(([name,country,flag],i)=><a href={`/loja?bodega=${encodeURIComponent(name)}`} className={`winery-card winery-${i+1}`} key={name}><div className="winery-logo-slot" aria-hidden="true"><span>{name.split(" ").map(v=>v[0]).join("").slice(0,3)}</span></div><div><strong>{name}</strong><span>{country}</span></div><Flag code={flag} name={country} className="country-flag small"/><Arrow/></a>)}</DragSlider>
-      </section>
-
-      <section id="sobre" className="section-shell about-section">
-        <div className="slider-head"><div><p className="kicker dark">VIDEIRA VINHOTECA</p><h2>Sobre nós</h2></div></div>
-        <div className="about-card"><p>Selecionamos vinhos com identidade, boa procedência e histórias que merecem ser compartilhadas. A Videira Vinhoteca foi pensada para tornar a descoberta de novos rótulos simples, elegante e próxima.</p></div>
-      </section>
-
-      <section id="faq" className="section-shell faq-section">
-        <div className="slider-head"><div><p className="kicker dark">DÚVIDAS FREQUENTES</p><h2>FAQ</h2></div></div>
-        <div className="faq-list">
-          <details><summary>Como faço um pedido?</summary><p>Adicione os rótulos ao carrinho e clique em “Continuar no WhatsApp”.</p></details>
-          <details><summary>Posso filtrar os vinhos?</summary><p>Sim. Na Loja você pode filtrar por país, uva, bodega e novidades.</p></details>
-          <details><summary>Vocês entregam para outras cidades?</summary><p>Consulte disponibilidade, prazo e frete diretamente pelo WhatsApp.</p></details>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <div className="footer-brand"><div className="footer-logo-lockup"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></div><p>Curadoria de vinhos com identidade.</p></div>
-      <div className="footer-columns">
-        <div><h4>Menu</h4><a href="#inicio">Início</a><a href="/loja">Loja</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a></div>
-        <div><h4>Políticas</h4><a href="/politicas/privacidade">Privacidade</a><a href="/politicas/trocas">Trocas e devoluções</a><a href="/politicas/termos">Termos de uso</a></div>
-      </div>
-      <div className="footer-contact"><h4>Redes sociais</h4><div className="socials"><a href="https://instagram.com/Videiravinhoteca" target="_blank" rel="noreferrer" aria-label="Instagram"><InstagramIcon/></a><a href="https://wa.me/5545999056277" target="_blank" rel="noreferrer" aria-label="WhatsApp"><WhatsIcon/></a></div><span>@Videiravinhoteca</span></div>
-    </footer>
-    <div className="site-bottom">© 2026 Videira Vinhoteca · CNPJ 69.423.008/0001-67</div>
-
-    <a className="whatsapp-float" href="https://wa.me/5545999056277" target="_blank" rel="noreferrer" aria-label="WhatsApp"><WhatsIcon/></a>
-
-    <aside className={`cart-drawer ${cartOpen?'open':''}`}>
-      <button className="drawer-close" onClick={()=>setCartOpen(false)}>×</button><p className="kicker dark">SEU CARRINHO</p><h2>Minha seleção</h2>
-      <div className="cart-items">{cart.length===0?<p className="empty">Seu carrinho está vazio.</p>:cart.map((p,i)=><div className="cart-item" key={`${p.id}-${i}`}><div><strong>{p.name}</strong><span>{p.winery}</span></div><div><b>{money(p.price)}</b><button onClick={()=>remove(i)}>Remover</button></div></div>)}</div>
-      <div className="cart-total"><span>Total</span><strong>{money(total)}</strong></div><button className="checkout" disabled={!cart.length} onClick={checkout}>Continuar no WhatsApp</button>
-    </aside>
-    {cartOpen&&<button className="backdrop" onClick={()=>setCartOpen(false)} aria-label="Fechar carrinho"/>}
-  </>
+ return <>
+  <header className="floating-header"><div className="header-pill"><a className="header-logo" href="#inicio"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a><nav><a className="active" href="#inicio">Início</a><a href="#vinhos">Vinhos</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a><a href="#sobre">Sobre nós</a><a href="#faq">FAQ</a></nav><div className="header-actions"><div className={`header-search ${searchOpen?'open':''}`}>{searchOpen&&<input autoFocus value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>e.key==='Enter'&&doSearch()} placeholder="Buscar vinho..."/>}<button className="icon-btn search-btn" onClick={doSearch}><SearchIcon/></button></div><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button><a className="shop-pill" href="/loja">Loja <Arrow/></a></div></div></header>
+  <main>
+   <section id="inicio" className="hero-clean"><div className="hero-text"><p className="kicker">CURADORIA DE VINHOS</p><h1>Grandes vinhos,<br/>bons momentos.</h1><p>Agora com os rótulos dos catálogos 2026 da Videira, nacionais e importados.</p><a className="primary-btn" href="/loja">Ver catálogo <Arrow/></a></div>{featured[0]&&<div className="hero-product"><Bottle wine={featured[0]}/><div className="hero-note"><span>CATÁLOGO</span><strong>{featured[0].name}</strong><small>{featured[0].winery} · {featured[0].country}</small></div></div>}</section>
+   <section className="regions-strip section-shell"><div className="slider-head"><h2>Explore por país</h2><a href="/loja">Ver todos <Arrow/></a></div><DragSlider className="compact">{countries.map(([name,flag],i)=><a href={`/loja?pais=${encodeURIComponent(name)}`} className={`region-card region-${i+1}`} key={name}><Flag code={flag} name={name} className="country-flag"/><div><strong>{name}</strong><span>Ver rótulos do país</span></div><Arrow/></a>)}</DragSlider></section>
+   <section id="vinhos" className="section-shell products-section"><div className="slider-head"><div><p className="kicker dark">NOSSA SELEÇÃO</p><h2>Vinhos em destaque</h2></div><a href="/loja">Ver todos <Arrow/></a></div><DragSlider className="product-row">{featured.map(w=><ProductCard key={w.id} w={w} onAdd={add}/>)}</DragSlider></section>
+   <section className="section-shell products-section"><div className="slider-head"><div><p className="kicker dark">CATÁLOGO 2026</p><h2>Últimos adicionados</h2></div><a href="/loja">Ver todos <Arrow/></a></div><DragSlider className="product-row">{newOnes.map(w=><ProductCard key={w.id} w={w} onAdd={add}/>)}</DragSlider></section>
+   <section className="section-shell products-section"><div className="slider-head"><div><p className="kicker dark">UMA UVA, MUITOS ESTILOS</p><h2>Malbecs</h2></div><a href="/loja?uva=Malbec">Ver todos <Arrow/></a></div><DragSlider className="product-row">{malbecs.map(w=><ProductCard key={w.id} w={w} onAdd={add}/>)}</DragSlider></section>
+   <section id="uvas" className="section-shell"><div className="slider-head"><div><p className="kicker dark">DESCUBRA SEU ESTILO</p><h2>Por uva</h2></div><a href="/loja">Ver todas <Arrow/></a></div><DragSlider className="grape-row">{grapes.map((g,i)=><a href={`/loja?uva=${encodeURIComponent(g)}`} className={`grape-tile grape-${i+1}`} key={g}><div><strong>{g}</strong><span>Ver rótulos</span></div><Arrow/></a>)}</DragSlider></section>
+   <section id="bodegas" className="section-shell"><div className="slider-head"><div><p className="kicker dark">PRODUTORES</p><h2>Bodegas em destaque</h2></div><a href="/loja">Ver todas <Arrow/></a></div><DragSlider className="winery-row">{wineries.map(([name,count],i)=><a href={`/loja?bodega=${encodeURIComponent(name)}`} className={`winery-card winery-${i+1}`} key={name}><div className="winery-logo-slot"><span>{name.split(' ').map(v=>v[0]).join('').slice(0,3)}</span></div><div><strong>{name}</strong><span>{count} rótulos</span></div><Arrow/></a>)}</DragSlider></section>
+   <section id="sobre" className="section-shell about-section"><div className="slider-head"><div><p className="kicker dark">VIDEIRA VINHOTECA</p><h2>Sobre nós</h2></div></div><div className="about-card"><p>Selecionamos vinhos com identidade, boa procedência e histórias que merecem ser compartilhadas.</p></div></section>
+   <section id="faq" className="section-shell faq-section"><div className="slider-head"><div><p className="kicker dark">DÚVIDAS FREQUENTES</p><h2>FAQ</h2></div></div><div className="faq-list"><details><summary>Como faço um pedido?</summary><p>Adicione os rótulos ao carrinho e clique em “Continuar no WhatsApp”.</p></details><details><summary>Posso filtrar os vinhos?</summary><p>Sim. Na Loja você pode pesquisar e filtrar por país, uva e bodega.</p></details><details><summary>Vocês entregam para outras cidades?</summary><p>Consulte disponibilidade, prazo e frete diretamente pelo WhatsApp.</p></details></div></section>
+  </main>
+  <footer><div className="footer-brand"><div className="footer-logo-lockup"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></div><p>Curadoria de vinhos com identidade.</p></div><div className="footer-columns"><div><h4>Menu</h4><a href="#inicio">Início</a><a href="/loja">Loja</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a></div><div><h4>Políticas</h4><a href="/politicas/privacidade">Privacidade</a><a href="/politicas/trocas">Trocas e devoluções</a><a href="/politicas/termos">Termos de uso</a></div></div><div className="footer-contact"><h4>Redes sociais</h4><div className="socials"><a href="https://instagram.com/Videiravinhoteca" target="_blank"><InstagramIcon/></a><a href="https://wa.me/5545999056277" target="_blank"><WhatsIcon/></a></div><span>@Videiravinhoteca</span></div></footer><div className="site-bottom">© 2026 Videira Vinhoteca · CNPJ 69.423.008/0001-67</div>
+  <a className="whatsapp-float" href="https://wa.me/5545999056277" target="_blank"><WhatsIcon/></a>
+  <aside className={`cart-drawer ${cartOpen?'open':''}`}><button className="drawer-close" onClick={()=>setCartOpen(false)}>×</button><p className="kicker dark">SEU CARRINHO</p><h2>Minha seleção</h2><div className="cart-items">{cart.length===0?<p className="empty">Seu carrinho está vazio.</p>:cart.map((p,i)=><div className="cart-item" key={i}><div><strong>{p.name}</strong><span>{p.winery}</span></div><div><b>{money(p.price)}</b><button onClick={()=>remove(i)}>Remover</button></div></div>)}</div><div className="cart-total"><span>Total</span><strong>{money(total)}</strong></div><button className="checkout" disabled={!cart.length} onClick={checkout}>Continuar no WhatsApp</button></aside>{cartOpen&&<button className="backdrop" onClick={()=>setCartOpen(false)}/>}
+ </>;
 }
