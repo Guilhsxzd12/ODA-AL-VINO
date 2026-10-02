@@ -2,25 +2,25 @@
 import { useEffect, useMemo, useState } from 'react';
 
 const wines = [
-  {id:1,name:'Catena Malbec',winery:'Catena Zapata',country:'Argentina',flag:'🇦🇷',grape:'Malbec',price:189.90,tone:'malbec',isNew:true},
-  {id:2,name:'Marques de Casa Concha',winery:'Concha y Toro',country:'Chile',flag:'🇨🇱',grape:'Cabernet Sauvignon',price:259.90,tone:'cabernet',isNew:true},
-  {id:3,name:'Brunello di Montalcino',winery:'Antinori',country:'Itália',flag:'🇮🇹',grape:'Sangiovese',price:429.90,tone:'blend',isNew:false},
-  {id:4,name:'Pinot Noir Reserva',winery:'Patagonia Select',country:'Argentina',flag:'🇦🇷',grape:'Pinot Noir',price:219.90,tone:'pinot',isNew:false},
-  {id:5,name:'Chardonnay Gran Reserva',winery:'Casa del Valle',country:'Chile',flag:'🇨🇱',grape:'Chardonnay',price:169.90,tone:'gold',isNew:true},
-  {id:6,name:'Bordeaux Supérieur',winery:'Maison Rouge',country:'França',flag:'🇫🇷',grape:'Blend',price:329.90,tone:'cabernet',isNew:false},
-  {id:7,name:'Malbec Adrianna Vineyard',winery:'Catena Zapata',country:'Argentina',flag:'🇦🇷',grape:'Malbec',price:399.90,tone:'malbec',isNew:true},
-  {id:8,name:'Malbec Estate',winery:'Rutini',country:'Argentina',flag:'🇦🇷',grape:'Malbec',price:279.90,tone:'blend',isNew:false},
-  {id:9,name:'Gran Reserva Malbec',winery:'Luigi Bosca',country:'Argentina',flag:'🇦🇷',grape:'Malbec',price:249.90,tone:'malbec',isNew:true},
-  {id:10,name:'Cabernet Franc',winery:'Salentein',country:'Argentina',flag:'🇦🇷',grape:'Cabernet Franc',price:229.90,tone:'cabernet',isNew:false},
-  {id:11,name:'Sauvignon Blanc',winery:'Concha y Toro',country:'Chile',flag:'🇨🇱',grape:'Sauvignon Blanc',price:129.90,tone:'gold',isNew:true},
-  {id:12,name:'Chianti Classico',winery:'Antinori',country:'Itália',flag:'🇮🇹',grape:'Sangiovese',price:289.90,tone:'blend',isNew:false},
+  {id:1,name:'Catena Malbec',winery:'Catena Zapata',country:'Argentina',flag:'ar',grape:'Malbec',price:189.90,tone:'malbec',isNew:true},
+  {id:2,name:'Marques de Casa Concha',winery:'Concha y Toro',country:'Chile',flag:'cl',grape:'Cabernet Sauvignon',price:259.90,tone:'cabernet',isNew:true},
+  {id:3,name:'Brunello di Montalcino',winery:'Antinori',country:'Itália',flag:'it',grape:'Sangiovese',price:429.90,tone:'blend',isNew:false},
+  {id:4,name:'Pinot Noir Reserva',winery:'Patagonia Select',country:'Argentina',flag:'ar',grape:'Pinot Noir',price:219.90,tone:'pinot',isNew:false},
+  {id:5,name:'Chardonnay Gran Reserva',winery:'Casa del Valle',country:'Chile',flag:'cl',grape:'Chardonnay',price:169.90,tone:'gold',isNew:true},
+  {id:6,name:'Bordeaux Supérieur',winery:'Maison Rouge',country:'França',flag:'fr',grape:'Blend',price:329.90,tone:'cabernet',isNew:false},
+  {id:7,name:'Malbec Adrianna Vineyard',winery:'Catena Zapata',country:'Argentina',flag:'ar',grape:'Malbec',price:399.90,tone:'malbec',isNew:true},
+  {id:8,name:'Malbec Estate',winery:'Rutini',country:'Argentina',flag:'ar',grape:'Malbec',price:279.90,tone:'blend',isNew:false},
+  {id:9,name:'Gran Reserva Malbec',winery:'Luigi Bosca',country:'Argentina',flag:'ar',grape:'Malbec',price:249.90,tone:'malbec',isNew:true},
+  {id:10,name:'Cabernet Franc',winery:'Salentein',country:'Argentina',flag:'ar',grape:'Cabernet Franc',price:229.90,tone:'cabernet',isNew:false},
+  {id:11,name:'Sauvignon Blanc',winery:'Concha y Toro',country:'Chile',flag:'cl',grape:'Sauvignon Blanc',price:129.90,tone:'gold',isNew:true},
+  {id:12,name:'Chianti Classico',winery:'Antinori',country:'Itália',flag:'it',grape:'Sangiovese',price:289.90,tone:'blend',isNew:false},
 ];
 
 const regions = [
-  {name:'Argentina',flag:'🇦🇷',sub:'Mendoza · Salta · Patagônia'},
-  {name:'Chile',flag:'🇨🇱',sub:'Maipo · Colchagua · Casablanca'},
-  {name:'Itália',flag:'🇮🇹',sub:'Toscana · Piemonte · Veneto'},
-  {name:'França',flag:'🇫🇷',sub:'Bordeaux · Borgonha · Rhône'},
+  {name:'Argentina',flag:'ar',sub:'Mendoza · Salta · Patagônia'},
+  {name:'Chile',flag:'cl',sub:'Maipo · Colchagua · Casablanca'},
+  {name:'Itália',flag:'it',sub:'Toscana · Piemonte · Veneto'},
+  {name:'França',flag:'fr',sub:'Bordeaux · Borgonha · Rhône'},
 ];
 
 const grapes = [
@@ -45,9 +45,10 @@ function SearchIcon(){return <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r=
 function Arrow(){return <span aria-hidden="true">→</span>}
 function InstagramIcon(){return <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>}
 function WhatsIcon(){return <svg viewBox="0 0 24 24"><path d="M20 11.8a8 8 0 0 1-11.8 7L4 20l1.3-4A8 8 0 1 1 20 11.8Z"/><path d="M9 8.5c.3 2.1 1.4 4 3.2 5.2 1 .7 2.1 1.1 3.3 1.2l1-1.4-2-.9-1 1c-1.5-.7-2.7-1.8-3.5-3.3l1-1.1-.8-2-1.2 1.3Z"/></svg>}
+function Flag({code,name,className=''}){return <span className={`flag-wrap ${className}`} title={name}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`} draggable="false"/></span>}
 function Bottle({tone='malbec'}){return <div className="bottle-wrap"><div className={`bottle ${tone}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>VIDEIRA</b><small>VINHOTECA</small></div></div></div></div>}
 function ProductCard({w,onAdd}){return <article className="wine-card">
-  <span className="origin-flag" title={w.country}>{w.flag}</span>
+  <Flag code={w.flag} name={w.country} className="origin-flag"/>
   <div className="wine-image"><Bottle tone={w.tone}/></div>
   <div className="wine-meta">
     <small>{w.country}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grape}</span>
@@ -63,6 +64,7 @@ export default function LojaPage(){
   const [grape,setGrape]=useState('');
   const [winery,setWinery]=useState('');
   const [onlyNew,setOnlyNew]=useState(false);
+  const [query,setQuery]=useState('');
 
   useEffect(()=>{
     const params=new URLSearchParams(window.location.search);
@@ -73,24 +75,25 @@ export default function LojaPage(){
   },[]);
   const perPage=8;
 
-  const filtered=useMemo(()=>wines.filter(w=>(!country||w.country===country)&&(!grape||w.grape===grape)&&(!winery||w.winery===winery)&&(!onlyNew||w.isNew)),[country,grape,winery,onlyNew]);
+  const filtered=useMemo(()=>{const q=query.trim().toLowerCase();return wines.filter(w=>(!country||w.country===country)&&(!grape||w.grape===grape)&&(!winery||w.winery===winery)&&(!onlyNew||w.isNew)&&(!q||[w.name,w.winery,w.country,w.grape].some(v=>v.toLowerCase().includes(q))))},[country,grape,winery,onlyNew,query]);
   const pages=Math.max(1,Math.ceil(filtered.length/perPage));
   const visible=filtered.slice((page-1)*perPage,page*perPage);
   const total=cart.reduce((s,p)=>s+p.price,0);
   const add=p=>setCart(v=>[...v,p]);
   const remove=i=>setCart(v=>v.filter((_,idx)=>idx!==i));
-  const reset=()=>{setCountry('');setGrape('');setWinery('');setOnlyNew(false);setPage(1)};
+  const reset=()=>{setCountry('');setGrape('');setWinery('');setOnlyNew(false);setQuery('');setPage(1)};
   const checkout=()=>{const lines=cart.map(p=>`• ${p.name} — ${money(p.price)}`).join('\n');const msg=encodeURIComponent(`Olá! Quero consultar estes vinhos da Videira Vinhoteca:\n\n${lines}\n\nTotal: ${money(total)}`);window.open(`https://wa.me/5545999056277?text=${msg}`,'_blank','noopener,noreferrer')};
 
   return <>
     <header className="floating-header"><div className="header-pill">
       <a className="header-logo" href="/"><img src="/videira-logo.svg" alt="Videira Vinhoteca"/></a>
-      <nav><a href="/">Início</a><a href="/loja">Loja</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a></nav>
+      <nav><a href="/">Início</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav>
       <div className="header-actions"><button className="icon-btn search-btn"><SearchIcon/></button><button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)}><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button><a className="shop-pill active" href="/loja">Loja <Arrow/></a></div>
     </div></header>
 
     <main className="shop-page">
       <section className="shop-page-hero"><p className="kicker">CATÁLOGO COMPLETO</p><h1>Loja</h1><p>Encontre seu próximo vinho por país, uva ou bodega.</p></section>
+      <section className="shop-search-wrap"><div className="shop-search"><SearchIcon/><input value={query} onChange={e=>{setQuery(e.target.value);setPage(1)}} placeholder="Pesquise por vinho, uva, país ou bodega..." aria-label="Pesquisar vinhos"/></div></section>
       <section className="shop-layout">
         <aside className="filters">
           <div className="filter-head"><h3>Filtros</h3><button onClick={reset}>Limpar</button></div>
