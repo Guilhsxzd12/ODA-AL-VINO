@@ -1,11 +1,11 @@
-/** Espelha o site oficial, mas preserva os arquivos locais personalizados do cabeçalho. */
+/** Espelha o site oficial ODA AL VINO no ambiente de teste. */
 const nextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
         {
-          source: '/:path((?!videira-logo\\.svg|_next/static/chunks/0ig_z31a~duel\\.js).*)',
-          destination: 'https://www.odaalvino.com.br/:path',
+          source: '/:path*',
+          destination: 'https://www.odaalvino.com.br/:path*',
         },
       ],
     };
