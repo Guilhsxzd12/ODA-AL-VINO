@@ -1,4 +1,14 @@
-export const metadata = { title: "ODA AL VINO — Teste" };
+import './globals.css';
+
+export const metadata = {
+  title: 'Videira Vinhoteca | Catálogo de Vinhos',
+  description: 'Catálogo de vinhos da Videira Vinhoteca.'
+};
+
 export default function RootLayout({ children }) {
-  return <html lang="es"><body>{children}</body></html>;
+  return (
+    <html lang="pt-BR">
+      <body>{children}</body>
+    </html>
+  );
 }
