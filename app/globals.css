@@ -244,7 +244,7 @@ footer{align-items:flex-start}
 /* real catalog photography */
 .wine-image{display:flex;align-items:center;justify-content:center;overflow:hidden}
 .wine-photo{display:block;max-width:88%;max-height:92%;width:auto;height:auto;object-fit:contain;mix-blend-mode:multiply;user-select:none;-webkit-user-drag:none}
-.hero-product>.wine-photo{position:relative;z-index:2;max-height:78%;max-width:54%;object-fit:contain;mix-blend-mode:screen}
+.hero-product>.wine-photo{position:relative;z-index:2;max-height:78%;max-width:54%;object-fit:contain;mix-blend-mode:multiply}
 .detail-visual{align-items:center}
 .detail-photo{position:relative;z-index:2;max-width:72%;max-height:88%;object-fit:contain;mix-blend-mode:multiply}
 .detail-related-row{overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
