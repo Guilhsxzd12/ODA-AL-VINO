@@ -1,5 +1,6 @@
 'use client';
 import { useMemo, useRef, useState } from 'react';
+import { HEADER_LOGO, FOOTER_LOGO } from './brand';
 
 const wines = [
   {id:1,name:'Catena Malbec',winery:'Catena Zapata',country:'Argentina',flag:'ar',grape:'Malbec',price:189.90,tone:'malbec',isNew:true},
@@ -32,11 +33,11 @@ const grapes = [
 ];
 
 const wineries = [
-  ['Catena Zapata','Argentina','🇦🇷'],
-  ['Concha y Toro','Chile','🇨🇱'],
-  ['Antinori','Itália','🇮🇹'],
-  ['Maison Rouge','França','🇫🇷'],
-  ['Rutini','Argentina','🇦🇷'],
+  ['Catena Zapata','Argentina','ar'],
+  ['Concha y Toro','Chile','cl'],
+  ['Antinori','Itália','it'],
+  ['Maison Rouge','França','fr'],
+  ['Rutini','Argentina','ar'],
 ];
 
 function money(v){return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
@@ -70,7 +71,7 @@ export default function Page(){
 
   return <>
     <header className="floating-header"><div className="header-pill">
-      <a className="header-logo" href="#inicio"><img src="/videira-logo.svg" alt="Videira Vinhoteca"/></a>
+      <a className="header-logo" href="#inicio"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a>
       <nav><a className="active" href="#inicio">Início</a><a href="#vinhos">Vinhos</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a><a href="#sobre">Sobre nós</a><a href="#faq">FAQ</a></nav>
       <div className="header-actions">
         <button className="icon-btn search-btn" aria-label="Buscar"><SearchIcon/></button>
@@ -114,7 +115,7 @@ export default function Page(){
 
       <section id="bodegas" className="section-shell">
         <div className="slider-head"><div><p className="kicker dark">PRODUTORES</p><h2>Bodegas em destaque</h2></div><a href="/loja">Ver todas <Arrow/></a></div>
-        <DragSlider className="winery-row">{wineries.map(([name,country,flag],i)=><a href={`/loja?bodega=${encodeURIComponent(name)}`} className={`winery-card winery-${i+1}`} key={name}><Flag code={flag} name={country} className="country-flag small"/><div><strong>{name}</strong><span>{country}</span></div><Arrow/></a>)}</DragSlider>
+        <DragSlider className="winery-row">{wineries.map(([name,country,flag],i)=><a href={`/loja?bodega=${encodeURIComponent(name)}`} className={`winery-card winery-${i+1}`} key={name}><div className="winery-logo-slot" aria-hidden="true"><span>{name.split(" ").map(v=>v[0]).join("").slice(0,3)}</span></div><div><strong>{name}</strong><span>{country}</span></div><Flag code={flag} name={country} className="country-flag small"/><Arrow/></a>)}</DragSlider>
       </section>
 
       <section id="sobre" className="section-shell about-section">
@@ -133,14 +134,14 @@ export default function Page(){
     </main>
 
     <footer>
-      <div className="footer-brand"><img src="/videira-logo.svg" alt="Videira Vinhoteca"/><p>Curadoria de vinhos com identidade.</p></div>
+      <div className="footer-brand"><img src={FOOTER_LOGO} alt="Videira Vinhoteca"/><p>Curadoria de vinhos com identidade.</p></div>
       <div className="footer-columns">
         <div><h4>Menu</h4><a href="#inicio">Início</a><a href="/loja">Loja</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a></div>
         <div><h4>Políticas</h4><a href="#">Privacidade</a><a href="#">Trocas e devoluções</a><a href="#">Termos de uso</a></div>
       </div>
       <div className="footer-contact"><h4>Redes sociais</h4><div className="socials"><a href="https://instagram.com/Videiravinhoteca" target="_blank" rel="noreferrer" aria-label="Instagram"><InstagramIcon/></a><a href="https://wa.me/5545999056277" target="_blank" rel="noreferrer" aria-label="WhatsApp"><WhatsIcon/></a></div><span>@Videiravinhoteca</span></div>
     </footer>
-    <div className="site-bottom">© 2026 Videira Vinhoteca · @Videiravinhoteca · CNPJ 69.423.008/0001-67</div>
+    <div className="site-bottom">© 2026 Videira Vinhoteca · CNPJ 69.423.008/0001-67</div>
 
     <a className="whatsapp-float" href="https://wa.me/5545999056277" target="_blank" rel="noreferrer" aria-label="WhatsApp"><WhatsIcon/></a>
 
