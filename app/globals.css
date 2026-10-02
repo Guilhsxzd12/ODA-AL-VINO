@@ -74,3 +74,16 @@ footer{grid-template-columns:1.1fr 1.2fr 1fr}.footer-brand img{height:92px;max-w
 .shop-search input::placeholder{color:rgba(71,7,44,.42)}
 @media(max-width:1150px){.header-logo{min-width:155px}.header-logo img{height:50px;max-width:150px}.header-pill nav a{padding:9px 8px;font-size:9px}.header-pill nav a[href="#sobre"],.header-pill nav a[href="#faq"],.header-pill nav a[href="/#sobre"],.header-pill nav a[href="/#faq"]{display:none}}
 @media(max-width:760px){.header-logo{min-width:86px;width:86px}.header-logo img{height:44px;max-width:86px}.footer-brand img{height:96px;max-width:260px}.whatsapp-float{right:16px;bottom:16px}}
+
+/* official brand assets + compact store */
+.header-logo{min-width:270px}
+.header-logo img{height:64px;max-width:260px;width:auto;object-fit:contain}
+.footer-brand img{height:150px;max-width:330px;width:auto;object-fit:contain}
+.winery-card{min-height:165px;padding-top:22px;align-items:flex-end}
+.winery-logo-slot{position:absolute;left:20px;top:18px;width:64px;height:52px;border-radius:12px;border:1px solid rgba(244,240,200,.28);background:rgba(244,240,200,.08);display:grid;place-items:center;color:var(--paper);font-family:'CCS Belvare',serif;font-size:20px;letter-spacing:.06em;z-index:2}
+.winery-card .country-flag.small{left:auto;right:18px;top:18px}
+.shop-page{padding-top:105px}
+.shop-search-wrap{padding-top:26px}
+.shop-page-hero{display:none!important}
+@media(max-width:1150px){.header-logo{min-width:180px}.header-logo img{height:54px;max-width:175px}}
+@media(max-width:760px){.header-logo{min-width:98px;width:98px}.header-logo img{height:46px;max-width:98px}.footer-brand img{height:118px;max-width:260px}}
