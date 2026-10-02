@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { HEADER_LOGO } from './brand';
 import { loadCatalog, money, winePath } from './catalogLoader';
+import WineImage from './WineImage';
 
 function CartIcon(){return <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"/></svg>}
 function SearchIcon(){return <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>}
@@ -11,7 +12,7 @@ function InstagramIcon(){return <svg viewBox="0 0 24 24"><rect x="3" y="3" width
 function WhatsIcon(){return <img className="social-icon-img" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="" draggable="false"/>}
 function Flag({code,name,className=''}){return code?<span className={`flag-wrap ${className}`} title={name}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`} draggable="false"/></span>:null}
 function Bottle({wine}){return <div className="bottle-wrap"><div className={`bottle ${wine?.tone||'blend'}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>{(wine?.name||'VINHO').slice(0,18)}</b><small>{(wine?.winery||'VIDEIRA').slice(0,18)}</small></div></div></div></div>}
-function ProductVisual({wine}){return wine?.image_url?<img className="wine-photo" src={wine.image_url} alt={wine.name} draggable="false"/>:<Bottle wine={wine}/>}
+function ProductVisual({wine}){return wine?.image_url?<WineImage className="wine-photo" src={wine.image_url} alt={wine.name}/>:<Bottle wine={wine}/>}
 function DragSlider({children,className=''}){const ref=useRef(null);const st=useRef({down:false,x:0,left:0,drag:false});const down=e=>{if(e.pointerType!=='mouse'||e.button!==0)return;const el=ref.current;if(!el)return;st.current={down:true,x:e.clientX,left:el.scrollLeft,drag:false}};const move=e=>{const el=ref.current;if(!el||!st.current.down||e.pointerType!=='mouse')return;const dx=e.clientX-st.current.x;if(!st.current.drag&&Math.abs(dx)>8){st.current.drag=true;el.classList.add('dragging');try{el.setPointerCapture?.(e.pointerId)}catch{}}if(st.current.drag){e.preventDefault();el.scrollLeft=st.current.left-dx}};const end=e=>{const el=ref.current;if(!el)return;st.current.down=false;el.classList.remove('dragging');if(st.current.drag){try{el.releasePointerCapture?.(e.pointerId)}catch{}}};const click=e=>{if(st.current.drag){e.preventDefault();e.stopPropagation();st.current.drag=false}};return <div ref={ref} className={`horizontal-scroll drag-slider ${className}`} onPointerDown={down} onPointerMove={move} onPointerUp={end} onPointerCancel={end} onClickCapture={click}>{children}</div>}
 function ProductCard({w,onAdd}){return <article className="wine-card"><Flag code={w.flag} name={w.country} className="origin-flag"/><a className="wine-card-link" href={winePath(w)}><div className="wine-image"><ProductVisual wine={w}/></div><div className="wine-meta"><small>{w.country||'Vinho'}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grapeDisplay||w.type||''}</span></div></a><div className="price-line"><strong>{money(w.price)}</strong><button onClick={e=>{e.preventDefault();e.stopPropagation();onAdd(w)}} aria-label={`Adicionar ${w.name}`}><CartIcon/></button></div></article>}
 
