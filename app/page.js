@@ -16,8 +16,8 @@ function DragSlider({children,className=''}){const ref=useRef(null);const st=use
 function ProductCard({w,onAdd}){return <article className="wine-card"><Flag code={w.flag} name={w.country} className="origin-flag"/><a className="wine-card-link" href={winePath(w)}><div className="wine-image"><ProductVisual wine={w}/></div><div className="wine-meta"><small>{w.country||'Vinho'}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grapeDisplay||w.type||''}</span></div></a><div className="price-line"><strong>{money(w.price)}</strong><button onClick={e=>{e.preventDefault();e.stopPropagation();onAdd(w)}} aria-label={`Adicionar ${w.name}`}><CartIcon/></button></div></article>}
 
 export default function Page(){
- const [wines,setWines]=useState([]),[cart,setCart]=useState([]),[cartOpen,setCartOpen]=useState(false),[menuOpen,setMenuOpen]=useState(false),[searchOpen,setSearchOpen]=useState(false),[query,setQuery]=useState(''),[ageOpen,setAgeOpen]=useState(false);
- useEffect(()=>{loadCatalog().then(setWines).catch(console.error);try{if(localStorage.getItem('videira-age-ok')!=='1')setAgeOpen(true)}catch{}},[]);
+ const [wines,setWines]=useState([]),[cart,setCart]=useState([]),[cartOpen,setCartOpen]=useState(false),[menuOpen,setMenuOpen]=useState(false),[searchOpen,setSearchOpen]=useState(false),[query,setQuery]=useState('');
+ useEffect(()=>{loadCatalog().then(setWines).catch(console.error)},[]);
  const total=useMemo(()=>cart.reduce((s,p)=>s+Number(p.price||0),0),[cart]);
  const add=p=>setCart(v=>[...v,p]); const remove=i=>setCart(v=>v.filter((_,x)=>x!==i));
  const checkout=()=>{const lines=cart.map(p=>`• ${p.name} — ${money(p.price)}`).join('\n');window.open(`https://wa.me/5545999056277?text=${encodeURIComponent(`Olá! Quero consultar estes vinhos da Videira Vinhoteca:\n\n${lines}\n\nTotal: ${money(total)}`)}`,'_blank','noopener,noreferrer')};
@@ -49,7 +49,6 @@ export default function Page(){
     </div>
   </aside>{menuOpen&&<button className="menu-backdrop" onClick={()=>setMenuOpen(false)}/>}
   <a className="whatsapp-float" href="https://wa.me/5545999056277" target="_blank"><WhatsIcon/></a>
-  {ageOpen&&<div className="age-gate"><div className="age-card"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/><p className="kicker dark">BEM-VINDO À VIDEIRA</p><h2>Você tem 18 anos ou mais?</h2><p>Este site contém informações sobre bebidas alcoólicas e é destinado somente a maiores de 18 anos.</p><div className="age-actions"><button onClick={()=>{try{localStorage.setItem('videira-age-ok','1')}catch{}setAgeOpen(false)}}>Sim, tenho 18+</button><a href="https://www.google.com/">Não</a></div></div></div>}
   <aside className={`cart-drawer ${cartOpen?'open':''}`}><button className="drawer-close" onClick={()=>setCartOpen(false)}>×</button><p className="kicker dark">SEU CARRINHO</p><h2>Minha seleção</h2><div className="cart-items">{cart.length===0?<p className="empty">Seu carrinho está vazio.</p>:cart.map((p,i)=><div className="cart-item" key={i}><div><strong>{p.name}</strong><span>{p.winery}</span></div><div><b>{money(p.price)}</b><button onClick={()=>remove(i)}>Remover</button></div></div>)}</div><div className="cart-total"><span>Total</span><strong>{money(total)}</strong></div><button className="checkout" disabled={!cart.length} onClick={checkout}>Continuar no WhatsApp</button></aside>{cartOpen&&<button className="backdrop" onClick={()=>setCartOpen(false)}/>}
  </>;
 }
