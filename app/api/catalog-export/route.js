@@ -1,3 +1,4 @@
+// temporary Supabase import bridge
 import { gunzipSync } from 'node:zlib';
 import { CATALOG_DATA_A } from '../../catalogDataA.js';
 import { CATALOG_DATA_B } from '../../catalogDataB.js';
