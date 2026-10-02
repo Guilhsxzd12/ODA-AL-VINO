@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { HEADER_LOGO } from '../brand';
-import { loadCatalog, money, winePath, wineIdFromSlug } from '../catalogLoader';
+import { loadWineById, loadRelatedWines, money, winePath, wineIdFromSlug } from '../catalogLoader';
+import useCart from '../useCart';
 
 function CartIcon(){return <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"/></svg>}
 function MenuIcon(){return <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>}
@@ -15,14 +16,14 @@ function Slider({children}){const ref=useRef(null);return <div ref={ref} classNa
 
 export default function WinePage(){
  const [slug,setSlug]=useState('');
- const [wines,setWines]=useState([]),[qty,setQty]=useState(1),[cartOpen,setCartOpen]=useState(false),[cartCount,setCartCount]=useState(0),[menuOpen,setMenuOpen]=useState(false);
- useEffect(()=>{const p=new URLSearchParams(window.location.search);setSlug(p.get('produto')||'');loadCatalog().then(setWines).catch(console.error)},[]);
+ const [wine,setWine]=useState(null),[related,setRelated]=useState([]),[loading,setLoading]=useState(true),[qty,setQty]=useState(1),[cartOpen,setCartOpen]=useState(false),[menuOpen,setMenuOpen]=useState(false);
+ const {cart,add,updateQty,remove,count:cartCount,total}=useCart();
+ useEffect(()=>{const p=new URLSearchParams(window.location.search);setSlug(p.get('produto')||'')},[]);
  const id=wineIdFromSlug(slug);
- const wine=useMemo(()=>wines.find(w=>String(w.id)===String(id)),[wines,id]);
- const related=useMemo(()=>wine?wines.filter(w=>w.winery===wine.winery&&w.id!==wine.id).slice(0,12):[],[wines,wine]);
+ useEffect(()=>{if(!id)return;let alive=true;setLoading(true);loadWineById(id).then(async w=>{if(!alive)return;setWine(w);if(w){const r=await loadRelatedWines(w.winery,w.id,12);if(alive)setRelated(r)}}).catch(console.error).finally(()=>alive&&setLoading(false));return()=>{alive=false}},[id]);
  useEffect(()=>{if(wine)document.title=`${wine.name} | Videira Vinhoteca`},[wine]);
- if(!wine)return <main className="policy-page"><a className="detail-back" href="/loja">← Voltar para loja</a><p>{wines.length?'Rótulo não encontrado.':'Carregando rótulo...'}</p></main>;
- const add=()=>{setCartCount(v=>v+qty);setCartOpen(true)};
+ if(!wine)return <main className="policy-page"><a className="detail-back" href="/loja">← Voltar para loja</a><p>{loading?'Carregando rótulo...':'Rótulo não encontrado.'}</p></main>;
+ const addCurrent=()=>{add(wine,qty);setCartOpen(true)};
  const quote=()=>window.open(`https://wa.me/5545999056277?text=${encodeURIComponent(`Olá! Gostaria de pedir um orçamento para ${qty} unidade(s) de ${wine.name} — ${wine.winery}.`)}`,'_blank','noopener,noreferrer');
 
  return <>
@@ -31,12 +32,12 @@ export default function WinePage(){
   <main className="wine-detail-page">
    <section className="wine-detail">
     <div className="detail-visual"><Flag code={wine.flag} name={wine.country} className="detail-flag"/><ProductVisual wine={wine}/></div>
-    <div className="detail-info"><a className="detail-back" href="/loja">← Voltar para loja</a><p className="kicker dark">{[wine.country,wine.region].filter(Boolean).join(' · ')}</p><h1>{wine.name}</h1><a className="detail-winery" href={`/loja?bodega=${encodeURIComponent(wine.winery)}`}>{wine.winery}</a><p className="detail-grape">{wine.grapeDisplay||wine.type||''}</p><div className="wine-facts">{wine.alcohol&&<p><b>Álcool:</b> {wine.alcohol}</p>}{wine.aging&&<p><b>Amadurecimento:</b> {wine.aging}</p>}{wine.type&&<p><b>Estilo:</b> {wine.type}</p>}{wine.grape&&wine.filterGrape==='Blends'&&<p><b>Uvas:</b> {wine.grapeDisplay}</p>}</div>{wine.notes&&<div className="tasting-notes"><h3>Notas</h3><p>{wine.notes}</p></div>}<strong className="detail-price">{money(wine.price)}</strong><div className="detail-actions"><div className="qty"><button onClick={()=>setQty(v=>Math.max(1,v-1))}>−</button><span>{qty}</span><button onClick={()=>setQty(v=>v+1)}>+</button></div><button className="detail-add" onClick={add}>Adicionar ao carrinho</button><button className="detail-quote" onClick={quote}>Pedir orçamento no WhatsApp</button></div></div>
+    <div className="detail-info"><a className="detail-back" href="/loja">← Voltar para loja</a><p className="kicker dark">{[wine.country,wine.region].filter(Boolean).join(' · ')}</p><h1>{wine.name}</h1><a className="detail-winery" href={`/loja?bodega=${encodeURIComponent(wine.winery)}`}>{wine.winery}</a><p className="detail-grape">{wine.grapeDisplay||wine.type||''}</p><div className="wine-facts">{wine.alcohol&&<p><b>Álcool:</b> {wine.alcohol}</p>}{wine.aging&&<p><b>Amadurecimento:</b> {wine.aging}</p>}{wine.type&&<p><b>Estilo:</b> {wine.type}</p>}{wine.grape&&wine.filterGrape==='Blends'&&<p><b>Uvas:</b> {wine.grapeDisplay}</p>}</div>{wine.notes&&<div className="tasting-notes"><h3>Notas</h3><p>{wine.notes}</p></div>}<strong className="detail-price">{money(wine.price)}</strong><div className="detail-actions"><div className="qty"><button onClick={()=>setQty(v=>Math.max(1,v-1))}>−</button><span>{qty}</span><button onClick={()=>setQty(v=>v+1)}>+</button></div><button className="detail-add" onClick={addCurrent}>Adicionar ao carrinho</button><button className="detail-quote" onClick={quote}>Pedir orçamento no WhatsApp</button></div></div>
    </section>
    <section className="section-shell related-section"><div className="slider-head"><div><p className="kicker dark">DA MESMA BODEGA</p><h2>Mais de {wine.winery}</h2></div><a href={`/loja?bodega=${encodeURIComponent(wine.winery)}`}>Ver todos <Arrow/></a></div>{related.length?<Slider>{related.map(w=><Related key={w.id} w={w}/>)}</Slider>:<div className="related-empty">Em breve mais rótulos desta bodega.</div>}</section>
   </main>
 
   <aside className={`mobile-menu ${menuOpen?'open':''}`}><div className="mobile-menu-shell"><nav className="mobile-menu-links"><a href="/">Início</a><a href="/loja">Loja</a><a href="/#vinhos">Vinhos</a><a href="/#uvas">Uvas</a><a href="/#bodegas">Bodegas</a><a href="/#sobre">Sobre nós</a><a href="/#faq">FAQ</a></nav></div></aside>{menuOpen&&<button className="menu-backdrop" onClick={()=>setMenuOpen(false)}/>}
-  <aside className={`cart-drawer ${cartOpen?'open':''}`}><button className="drawer-close" onClick={()=>setCartOpen(false)}>×</button><p className="kicker dark">SEU CARRINHO</p><h2>Minha seleção</h2><div className="cart-items"><div className="cart-item"><div><strong>{wine.name}</strong><span>{qty} unidade(s)</span></div><div><b>{money(Number(wine.price||0)*qty)}</b></div></div></div><div className="cart-total"><span>Total</span><strong>{money(Number(wine.price||0)*qty)}</strong></div><button className="checkout" onClick={quote}>Continuar no WhatsApp</button></aside>{cartOpen&&<button className="backdrop" onClick={()=>setCartOpen(false)}/>}
+  <aside className={`cart-drawer ${cartOpen?'open':''}`}><button className="drawer-close" onClick={()=>setCartOpen(false)}>×</button><p className="kicker dark">SEU CARRINHO</p><h2>Minha seleção</h2><div className="cart-items">{cart.length===0?<p className="empty">Seu carrinho está vazio.</p>:cart.map(p=><div className="cart-item" key={p.id}><div><strong>{p.name}</strong><span>{p.winery}</span><div className="cart-qty"><button onClick={()=>updateQty(p.id,p.qty-1)}>−</button><input type="number" min="1" value={p.qty} onChange={e=>updateQty(p.id,e.target.value)}/><button onClick={()=>updateQty(p.id,p.qty+1)}>+</button></div></div><div><b>{money(Number(p.price||0)*p.qty)}</b><button onClick={()=>remove(p.id)}>Remover</button></div></div>)}</div><div className="cart-total"><span>Total</span><strong>{money(total)}</strong></div><button className="checkout" disabled={!cart.length} onClick={()=>{const lines=cart.map(p=>`• ${p.qty}x ${p.name} — ${money(Number(p.price||0)*p.qty)}`).join('\n');window.open(`https://wa.me/5545999056277?text=${encodeURIComponent(`Olá! Quero consultar estes vinhos da Videira Vinhoteca:\n\n${lines}\n\nTotal: ${money(total)}`)}`,'_blank','noopener,noreferrer')}}>Continuar no WhatsApp</button></aside>{cartOpen&&<button className="backdrop" onClick={()=>setCartOpen(false)}/>}
  </>;
 }
