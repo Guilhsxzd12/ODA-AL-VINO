@@ -762,3 +762,22 @@ footer,.site-bottom{background:var(--wine)!important}
   .adm-content{padding:24px 14px 50px}.adm-top h1{font-size:38px}.adm-toolbar{align-items:stretch;flex-direction:column;gap:8px}
   .adm-form-grid{grid-template-columns:1fr}.adm-span-2{grid-column:auto}
 }
+
+/* bottle image cleanup: transparent cutouts without cropping */
+.wine-image,.detail-visual{isolation:isolate}
+.wine-photo{
+  object-fit:contain!important;
+  object-position:center!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:88%!important;
+  max-height:92%!important;
+  mix-blend-mode:normal!important;
+  filter:none!important;
+}
+.detail-photo{max-width:82%!important;max-height:88%!important}
+.grape-row{scroll-snap-type:x proximity}
+.grape-tile{scroll-snap-align:start}
+@media(max-width:760px){
+  .wine-photo{max-width:86%!important;max-height:90%!important}
+}
