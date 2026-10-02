@@ -51,11 +51,13 @@ function DragSlider({children,className=''}){const ref=useRef(null);const state=
 function Bottle({tone='malbec'}){return <div className="bottle-wrap"><div className={`bottle ${tone}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>VIDEIRA</b><small>VINHOTECA</small></div></div></div></div>}
 function ProductCard({w,onAdd}){return <article className="wine-card">
   <Flag code={w.flag} name={w.country} className="origin-flag"/>
-  <div className="wine-image"><Bottle tone={w.tone}/></div>
-  <div className="wine-meta">
-    <small>{w.country}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grape}</span>
-    <div className="price-line"><strong>{money(w.price)}</strong><button onClick={()=>onAdd(w)} aria-label={`Adicionar ${w.name}`}><CartIcon/></button></div>
-  </div>
+  <a className="wine-card-link" href={`/vinho/${w.id}`} aria-label={`Ver ${w.name}`}>
+    <div className="wine-image"><Bottle tone={w.tone}/></div>
+    <div className="wine-meta">
+      <small>{w.country}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grape}</span>
+    </div>
+  </a>
+  <div className="price-line"><strong>{money(w.price)}</strong><button onClick={(e)=>{e.preventDefault();e.stopPropagation();onAdd(w)}} aria-label={`Adicionar ${w.name}`}><CartIcon/></button></div>
 </article>}
 
 export default function Page(){
@@ -134,7 +136,7 @@ export default function Page(){
     </main>
 
     <footer>
-      <div className="footer-brand"><img src={FOOTER_LOGO} alt="Videira Vinhoteca"/><p>Curadoria de vinhos com identidade.</p></div>
+      <div className="footer-brand"><div className="footer-logo-lockup"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></div><p>Curadoria de vinhos com identidade.</p></div>
       <div className="footer-columns">
         <div><h4>Menu</h4><a href="#inicio">Início</a><a href="/loja">Loja</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a></div>
         <div><h4>Políticas</h4><a href="#">Privacidade</a><a href="#">Trocas e devoluções</a><a href="#">Termos de uso</a></div>
