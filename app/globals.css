@@ -160,3 +160,9 @@ footer{align-items:flex-start}
 .policy-content p{margin:0;color:rgba(71,7,44,.66);line-height:1.75}
 .policy-note{margin-top:30px;font-size:11px;color:rgba(71,7,44,.45)}
 @media(max-width:760px){.header-search.open input{width:120px}.policy-page{padding-top:120px}}
+
+.wine-facts{margin:22px 0;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.wine-facts p{margin:7px 0;color:rgba(71,7,44,.68);line-height:1.55}
+.tasting-notes{margin:24px 0}.tasting-notes h3{font-family:'CCS Belvare',serif;font-size:25px;font-weight:400;margin:0 0 8px}.tasting-notes p{margin:0;color:rgba(71,7,44,.68);line-height:1.75}
+.source-note{margin-top:20px;font-size:10px;color:rgba(71,7,44,.42)}
+.label b{font-size:8px;line-height:1.05;padding:0 3px}.label small{font-size:4.5px;line-height:1.1;padding:0 3px}
