@@ -781,3 +781,10 @@ footer,.site-bottom{background:var(--wine)!important}
 @media(max-width:760px){
   .wine-photo{max-width:86%!important;max-height:90%!important}
 }
+
+/* imagens substituídas por fontes web com fundo branco:
+   multiply integra o branco ao fundo do card sem apagar partes da garrafa */
+.wine-photo.web-photo{
+  mix-blend-mode:multiply!important;
+  background:transparent!important;
+}
