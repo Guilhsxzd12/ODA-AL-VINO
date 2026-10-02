@@ -423,3 +423,27 @@ footer{align-items:flex-start}
 .age-actions button{border:0;background:var(--wine);color:var(--paper)}
 .age-actions a{border:1px solid var(--wine);color:var(--wine)}
 @media(max-width:520px){.age-card{padding:28px 22px}.age-card h2{font-size:34px}.age-actions{flex-direction:column}}
+
+/* menu mobile: usa o próprio botão do cabeçalho como X, sem repetir logo */
+@media(max-width:760px){
+  .mobile-menu{top:86px!important;right:12px!important;width:min(360px,calc(100vw - 24px))!important}
+  .mobile-menu-shell{padding:10px 12px 12px!important}
+  .mobile-menu-top{display:none!important}
+  .mobile-menu-links{border:1px solid rgba(244,240,200,.28)!important;border-radius:22px!important;padding:4px 18px!important;background:transparent!important}
+  .mobile-menu-btn.is-open{border:1px solid rgba(244,240,200,.26);border-radius:50%;background:rgba(244,240,200,.08)}
+  .mobile-menu-btn.is-open svg{width:24px;height:24px}
+}
+
+/* fotos: remove o recorte automático defeituoso; preserva o rótulo inteiro */
+.wine-photo{filter:none!important;clip-path:none!important;max-width:88%;max-height:92%;object-fit:contain;background:transparent}
+.wine-image .wine-photo{mix-blend-mode:multiply!important}
+.detail-visual .wine-photo{mix-blend-mode:multiply!important}
+
+/* logo vinho no aviso de idade */
+.age-logo-mask{
+  display:block;width:220px;max-width:70%;height:74px;margin:0 auto 22px;
+  background:var(--wine);
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center;
+  -webkit-mask-size:contain;mask-size:contain;
+}
