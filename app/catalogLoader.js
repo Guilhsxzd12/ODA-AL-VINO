@@ -1,24 +1,44 @@
 'use client';
-import { CATALOG_DATA_A } from './catalogDataA';
-import { CATALOG_DATA_B } from './catalogDataB';
+
+const SUPABASE_URL='https://rmyybeaepscmzbddnvzr.supabase.co';
+const SUPABASE_KEY='sb_publishable_lINNHBmZk9rvHYgtQetewg_NTRAEWq2';
 
 let catalogPromise;
 
-function decodeBase64(value){
-  const binary=atob(value);
-  const bytes=new Uint8Array(binary.length);
-  for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
-  return bytes;
+function toneFor(w){
+  const s=[w.grape,w.name,w.type].filter(Boolean).join(' ').toLowerCase();
+  if(s.includes('rosé')||s.includes('rose')) return 'pinot';
+  if(s.includes('pinot noir')) return 'pinot';
+  if(s.includes('malbec')) return 'malbec';
+  if(s.includes('chardonnay')||s.includes('sauvignon blanc')||s.includes('riesling')||s.includes('moscatel')||s.includes('moscato')||s.includes('glera')||s.includes('prosecco')||s.includes('branco')) return 'gold';
+  if(s.includes('cabernet')||s.includes('tannat')||s.includes('syrah')||s.includes('shiraz')||s.includes('pinotage')) return 'cabernet';
+  return 'blend';
+}
+
+function normalize(w){
+  const item={
+    ...w,
+    flag:w.country_code||'',
+    notes:w.tasting_notes||'',
+    source:w.source_catalog||'',
+    sourcePage:w.source_page,
+    isNew:Boolean(w.new_arrival),
+  };
+  item.tone=toneFor(item);
+  return item;
 }
 
 export function loadCatalog(){
   if(!catalogPromise){
     catalogPromise=(async()=>{
-      const bytes=decodeBase64(CATALOG_DATA_A+CATALOG_DATA_B);
-      if(typeof DecompressionStream==='undefined') throw new Error('Navegador sem suporte à descompressão do catálogo.');
-      const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-      const text=await new Response(stream).text();
-      return JSON.parse(text);
+      const url=SUPABASE_URL+'/rest/v1/products?select=*&active=eq.true&order=sort_order.asc';
+      const response=await fetch(url,{
+        headers:{apikey:SUPABASE_KEY},
+        cache:'no-store'
+      });
+      if(!response.ok) throw new Error('Não foi possível carregar o catálogo.');
+      const rows=await response.json();
+      return rows.map(normalize);
     })();
   }
   return catalogPromise;
