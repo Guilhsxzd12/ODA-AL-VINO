@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { HEADER_LOGO } from '../brand';
 import { loadWineById, loadRelatedWines, money, winePath, wineIdFromSlug } from '../catalogLoader';
 import useCart from '../useCart';
+import WineThumb from '../WineThumb';
 
 function CartIcon(){return <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"/></svg>}
 function MenuIcon(){return <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>}
@@ -10,7 +11,7 @@ function CloseIcon(){return <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 
 function Arrow(){return <span>→</span>}
 function Flag({code,name,className=''}){return code?<span className={`flag-wrap ${className}`}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`}/></span>:null}
 function Bottle({wine}){return <div className="bottle-wrap"><div className={`bottle ${wine?.tone||'blend'}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>{(wine?.name||'VINHO').slice(0,18)}</b><small>{(wine?.winery||'VIDEIRA').slice(0,18)}</small></div></div></div></div>}
-function ProductVisual({wine}){return wine?.image_url?<img className="wine-photo detail-photo" src={wine.image_url} alt={wine.name}/>:<Bottle wine={wine}/>}
+function ProductVisual({wine}){return wine?<WineThumb wine={wine} className="wine-photo detail-photo"/>:<Bottle wine={wine}/>} 
 function Related({w}){return <a className="wine-card related-card" href={winePath(w)}><Flag code={w.flag} name={w.country} className="origin-flag"/><div className="wine-image"><ProductVisual wine={w}/></div><div className="wine-meta"><small>{w.country}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grapeDisplay||w.type||''}</span><div className="price-line"><strong>{money(w.price)}</strong><Arrow/></div></div></a>}
 function Slider({children}){const ref=useRef(null);return <div ref={ref} className="horizontal-scroll product-row detail-related-row">{children}</div>}
 
