@@ -565,3 +565,71 @@ footer,.site-bottom{background:var(--wine)!important}
   .region-card{min-width:70vw!important;max-width:260px!important;width:auto!important;height:122px!important;min-height:122px!important}
   .winery-card{min-width:72vw!important;max-width:275px!important;width:auto!important}
 }
+
+/* age gate — resposta negativa temporária */
+.age-actions .age-no{
+  background:transparent!important;
+  color:var(--wine)!important;
+  border:1px solid var(--wine)!important;
+}
+.age-card.age-denied{padding:0;overflow:hidden}
+.age-card.age-denied .age-logo-mask{margin:28px auto 10px;height:64px}
+.age-denied-head{
+  background:var(--wine);
+  color:var(--paper);
+  padding:26px 28px 30px;
+}
+.age-denied-head h2{
+  color:var(--paper)!important;
+  margin:0 0 10px!important;
+  font-size:40px!important;
+}
+.age-denied-head p{
+  margin:0;
+  color:rgba(244,240,200,.9);
+  font-weight:700;
+  line-height:1.5;
+}
+.age-denied-body{padding:30px 34px 34px}
+.age-denied-body p{
+  margin:0 0 22px;
+  color:rgba(71,7,44,.78);
+  line-height:1.65;
+}
+.age-denied-body a{
+  text-decoration:underline;
+  font-weight:700;
+  color:var(--wine);
+}
+.age-denied-body small{
+  display:block;
+  color:rgba(71,7,44,.5);
+  line-height:1.5;
+}
+
+/* mobile touch: vertical scroll must work even when finger starts over a card */
+@media(max-width:760px){
+  .horizontal-scroll,
+  .drag-slider,
+  .product-row,
+  .country-slider,
+  .winery-row,
+  .grape-row{
+    touch-action:auto!important;
+    overscroll-behavior-x:contain;
+    overscroll-behavior-y:auto;
+    scroll-snap-type:x proximity!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  .horizontal-scroll>*,
+  .drag-slider>*{
+    touch-action:auto!important;
+  }
+  .wine-card,
+  .region-card,
+  .winery-card,
+  .grape-tile,
+  .wine-card-link{
+    touch-action:auto!important;
+  }
+}
