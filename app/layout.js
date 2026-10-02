@@ -1,8 +1,10 @@
+import { FAVICON } from './brand';
 import './globals.css';
 
 export const metadata = {
   title: 'Videira Vinhoteca | Catálogo de Vinhos',
-  description: 'Catálogo de vinhos da Videira Vinhoteca.'
+  description: 'Catálogo de vinhos da Videira Vinhoteca.',
+  icons: { icon: FAVICON, shortcut: FAVICON, apple: FAVICON }
 };
 
 export default function RootLayout({ children }) {
