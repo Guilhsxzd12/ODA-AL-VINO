@@ -74,17 +74,33 @@ function normalize(w){
   return item;
 }
 
+async function fetchRows(query){
+  const response=await fetch(SUPABASE_URL+'/rest/v1/products?'+query,{headers:{apikey:SUPABASE_KEY},cache:'no-store'});
+  if(!response.ok) throw new Error('Não foi possível carregar o catálogo.');
+  return response.json();
+}
+
 export function loadCatalog(){
   if(!catalogPromise){
     catalogPromise=(async()=>{
-      const url=SUPABASE_URL+'/rest/v1/products?select=*&active=eq.true&order=sort_order.asc';
-      const response=await fetch(url,{headers:{apikey:SUPABASE_KEY},cache:'no-store'});
-      if(!response.ok) throw new Error('Não foi possível carregar o catálogo.');
-      const rows=await response.json();
+      const rows=await fetchRows('select=*&active=eq.true&order=sort_order.asc');
       return rows.map(normalize);
     })();
   }
   return catalogPromise;
+}
+
+export async function loadWineById(id){
+  if(!id)return null;
+  const rows=await fetchRows('select=*&active=eq.true&id=eq.'+encodeURIComponent(id)+'&limit=1');
+  return rows[0]?normalize(rows[0]):null;
+}
+
+export async function loadRelatedWines(winery,excludeId,limit=12){
+  if(!winery)return [];
+  const q='select=*&active=eq.true&winery=eq.'+encodeURIComponent(winery)+'&id=neq.'+encodeURIComponent(excludeId||'')+'&order=sort_order.asc&limit='+Number(limit||12);
+  const rows=await fetchRows(q);
+  return rows.map(normalize);
 }
 
 export function money(value){
