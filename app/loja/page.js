@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { HEADER_LOGO } from '../brand';
 import { loadCatalog, money, winePath } from '../catalogLoader';
+import WineImage from '../WineImage';
 
 function CartIcon(){return <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"/></svg>}
 function SearchIcon(){return <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>}
@@ -11,7 +12,7 @@ function Arrow(){return <span>→</span>}
 function WhatsIcon(){return <img className="social-icon-img" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt=""/>}
 function Flag({code,name,className=''}){return code?<span className={`flag-wrap ${className}`}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`}/></span>:null}
 function Bottle({wine}){return <div className="bottle-wrap"><div className={`bottle ${wine?.tone||'blend'}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>{(wine?.name||'VINHO').slice(0,18)}</b><small>{(wine?.winery||'VIDEIRA').slice(0,18)}</small></div></div></div></div>}
-function ProductVisual({wine}){return wine?.image_url?<img className="wine-photo" src={wine.image_url} alt={wine.name} draggable="false"/>:<Bottle wine={wine}/>}
+function ProductVisual({wine}){return wine?.image_url?<WineImage className="wine-photo" src={wine.image_url} alt={wine.name}/>:<Bottle wine={wine}/>}
 function ProductCard({w,onAdd}){return <article className="wine-card"><Flag code={w.flag} name={w.country} className="origin-flag"/><a className="wine-card-link" href={winePath(w)}><div className="wine-image"><ProductVisual wine={w}/></div><div className="wine-meta"><small>{w.country||'Vinho'}</small><h3>{w.name}</h3><p>{w.winery}</p><span>{w.grapeDisplay||w.type||''}</span></div></a><div className="price-line"><strong>{money(w.price)}</strong><button onClick={e=>{e.preventDefault();e.stopPropagation();onAdd(w)}}><CartIcon/></button></div></article>}
 
 export default function LojaPage(){
