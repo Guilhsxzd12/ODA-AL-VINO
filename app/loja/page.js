@@ -1,6 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 const wines = [
   {id:1,name:'Catena Malbec',winery:'Catena Zapata',country:'Argentina',flag:'🇦🇷',grape:'Malbec',price:189.90,tone:'malbec',isNew:true},
@@ -57,14 +56,21 @@ function ProductCard({w,onAdd}){return <article className="wine-card">
 </article>}
 
 export default function LojaPage(){
-  const params=useSearchParams();
   const [cart,setCart]=useState([]);
   const [cartOpen,setCartOpen]=useState(false);
   const [page,setPage]=useState(1);
-  const [country,setCountry]=useState(params.get('pais')||'');
-  const [grape,setGrape]=useState(params.get('uva')||'');
-  const [winery,setWinery]=useState(params.get('bodega')||'');
-  const [onlyNew,setOnlyNew]=useState(params.get('novidades')==='1');
+  const [country,setCountry]=useState('');
+  const [grape,setGrape]=useState('');
+  const [winery,setWinery]=useState('');
+  const [onlyNew,setOnlyNew]=useState(false);
+
+  useEffect(()=>{
+    const params=new URLSearchParams(window.location.search);
+    setCountry(params.get('pais')||'');
+    setGrape(params.get('uva')||'');
+    setWinery(params.get('bodega')||'');
+    setOnlyNew(params.get('novidades')==='1');
+  },[]);
   const perPage=8;
 
   const filtered=useMemo(()=>wines.filter(w=>(!country||w.country===country)&&(!grape||w.grape===grape)&&(!winery||w.winery===winery)&&(!onlyNew||w.isNew)),[country,grape,winery,onlyNew]);
