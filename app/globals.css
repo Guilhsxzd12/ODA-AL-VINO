@@ -142,3 +142,21 @@ footer{align-items:flex-start}
 .related-empty{padding:28px;border:1px solid var(--line);border-radius:18px;color:rgba(71,7,44,.55);background:#fffdf2}
 @media(max-width:900px){.wine-detail{grid-template-columns:1fr;gap:30px}.detail-visual{height:430px}.detail-info{max-width:none}}
 @media(max-width:640px){.wine-detail{padding-top:34px}.detail-visual{height:360px}.detail-visual .bottle{transform:scale(1.05)}.detail-actions{align-items:stretch}.qty{width:max-content}.detail-add,.detail-quote{width:100%}}
+
+/* functional navigation/search */
+.header-search{display:flex;align-items:center;border-radius:999px;transition:.2s;background:transparent}
+.header-search.open{background:rgba(244,240,200,.10);padding-left:12px}
+.header-search input{width:180px;border:0;outline:0;background:transparent;color:var(--paper);font-size:11px}
+.header-search input::placeholder{color:rgba(244,240,200,.58)}
+.header-search .icon-btn{flex:0 0 auto}
+.drag-slider{touch-action:pan-y;overscroll-behavior-inline:contain}
+.drag-slider.dragging a,.drag-slider.dragging button{pointer-events:none}
+.policy-page{max-width:960px;margin:0 auto;padding:145px max(5vw,24px) 90px;min-height:100vh}
+.policy-page h1{font-family:'CCS Belvare',serif;font-weight:400;font-size:clamp(48px,7vw,78px);line-height:.95;margin:14px 0 20px}
+.policy-intro{font-size:17px;line-height:1.8;color:rgba(71,7,44,.68);max-width:760px}
+.policy-content{margin-top:42px;border-top:1px solid var(--line)}
+.policy-content section{padding:28px 0;border-bottom:1px solid var(--line)}
+.policy-content h2{font-family:'CCS Belvare',serif;font-size:28px;font-weight:400;margin:0 0 10px}
+.policy-content p{margin:0;color:rgba(71,7,44,.66);line-height:1.75}
+.policy-note{margin-top:30px;font-size:11px;color:rgba(71,7,44,.45)}
+@media(max-width:760px){.header-search.open input{width:120px}.policy-page{padding-top:120px}}
