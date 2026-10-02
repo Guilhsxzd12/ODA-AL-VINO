@@ -1,14 +1,12 @@
-/** Espelha o site oficial ODA AL VINO no ambiente de teste. */
+/** Projeto próprio da Videira. Mantém apenas as fontes do design de referência via origem. */
 const nextConfig = {
   async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/:path*',
-          destination: 'https://www.odaalvino.com.br/:path*',
-        },
-      ],
-    };
+    return [
+      {
+        source: '/oda/Fonts/:path*',
+        destination: 'https://www.odaalvino.com.br/oda/Fonts/:path*',
+      },
+    ];
   },
 };
 export default nextConfig;
