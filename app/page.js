@@ -47,7 +47,43 @@ function Arrow(){return <span aria-hidden="true">→</span>}
 function InstagramIcon(){return <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>}
 function WhatsIcon(){return <img className="social-icon-img" src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="" draggable="false"/>}
 function Flag({code,name,className=''}){return <span className={`flag-wrap ${className}`} title={name}><img src={`https://flagcdn.com/w80/${code}.png`} alt={`Bandeira de ${name}`} draggable="false"/></span>}
-function DragSlider({children,className=''}){const ref=useRef(null);const state=useRef({down:false,x:0,left:0,moved:false});const down=e=>{const el=ref.current;if(!el)return;state.current={down:true,x:e.clientX,left:el.scrollLeft,moved:false};el.setPointerCapture?.(e.pointerId);el.classList.add('dragging')};const move=e=>{const el=ref.current;if(!el||!state.current.down)return;const dx=e.clientX-state.current.x;if(Math.abs(dx)>4)state.current.moved=true;el.scrollLeft=state.current.left-dx;e.preventDefault()};const up=e=>{const el=ref.current;if(!el)return;state.current.down=false;el.classList.remove('dragging');el.releasePointerCapture?.(e.pointerId)};const click=e=>{if(state.current.moved){e.preventDefault();e.stopPropagation();state.current.moved=false}};return <div ref={ref} className={`horizontal-scroll drag-slider ${className}`} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onClickCapture={click}>{children}</div>}
+function DragSlider({children,className=''}) {
+  const ref=useRef(null);
+  const state=useRef({down:false,startX:0,lastX:0,left:0,dragged:false,pointerId:null});
+  const down=(e)=>{
+    if(e.button!==undefined && e.button!==0) return;
+    const el=ref.current;if(!el)return;
+    state.current={down:true,startX:e.clientX,lastX:e.clientX,left:el.scrollLeft,dragged:false,pointerId:e.pointerId};
+  };
+  const move=(e)=>{
+    const el=ref.current;if(!el||!state.current.down)return;
+    const dx=e.clientX-state.current.startX;
+    if(!state.current.dragged && Math.abs(dx)>8){
+      state.current.dragged=true;
+      el.classList.add('dragging');
+      try{el.setPointerCapture?.(e.pointerId)}catch{}
+    }
+    if(state.current.dragged){
+      e.preventDefault();
+      el.scrollLeft=state.current.left-dx;
+      state.current.lastX=e.clientX;
+    }
+  };
+  const end=(e)=>{
+    const el=ref.current;if(!el)return;
+    state.current.down=false;
+    el.classList.remove('dragging');
+    if(state.current.dragged){try{el.releasePointerCapture?.(e.pointerId)}catch{}}
+  };
+  const click=(e)=>{
+    if(state.current.dragged){
+      e.preventDefault();
+      e.stopPropagation();
+      state.current.dragged=false;
+    }
+  };
+  return <div ref={ref} className={`horizontal-scroll drag-slider ${className}`} onPointerDown={down} onPointerMove={move} onPointerUp={end} onPointerCancel={end} onClickCapture={click}>{children}</div>
+}
 function Bottle({tone='malbec'}){return <div className="bottle-wrap"><div className={`bottle ${tone}`}><div className="neck"/><div className="shoulder"/><div className="body"><div className="label"><b>VIDEIRA</b><small>VINHOTECA</small></div></div></div></div>}
 function ProductCard({w,onAdd}){return <article className="wine-card">
   <Flag code={w.flag} name={w.country} className="origin-flag"/>
@@ -63,10 +99,13 @@ function ProductCard({w,onAdd}){return <article className="wine-card">
 export default function Page(){
   const [cart,setCart]=useState([]);
   const [cartOpen,setCartOpen]=useState(false);
+  const [headerSearchOpen,setHeaderSearchOpen]=useState(false);
+  const [headerQuery,setHeaderQuery]=useState('');
   const total=useMemo(()=>cart.reduce((s,p)=>s+p.price,0),[cart]);
   const add=(p)=>setCart(v=>[...v,p]);
   const remove=(i)=>setCart(v=>v.filter((_,idx)=>idx!==i));
   const checkout=()=>{const lines=cart.map(p=>`• ${p.name} — ${money(p.price)}`).join('\n');const msg=encodeURIComponent(`Olá! Quero consultar estes vinhos da Videira Vinhoteca:\n\n${lines}\n\nTotal: ${money(total)}`);window.open(`https://wa.me/5545999056277?text=${msg}`,'_blank','noopener,noreferrer')};
+  const submitHeaderSearch=()=>{const q=headerQuery.trim();if(!headerSearchOpen){setHeaderSearchOpen(true);return;}if(q)window.location.href=`/loja?q=${encodeURIComponent(q)}`;};
 
   const malbecs=wines.filter(w=>w.grape==='Malbec');
   const novidades=wines.filter(w=>w.isNew);
@@ -76,7 +115,10 @@ export default function Page(){
       <a className="header-logo" href="#inicio"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></a>
       <nav><a className="active" href="#inicio">Início</a><a href="#vinhos">Vinhos</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a><a href="#sobre">Sobre nós</a><a href="#faq">FAQ</a></nav>
       <div className="header-actions">
-        <button className="icon-btn search-btn" aria-label="Buscar"><SearchIcon/></button>
+        <div className={`header-search ${headerSearchOpen?'open':''}`}>
+          {headerSearchOpen&&<input autoFocus value={headerQuery} onChange={e=>setHeaderQuery(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')submitHeaderSearch();if(e.key==='Escape')setHeaderSearchOpen(false)}} placeholder="Buscar vinho..." aria-label="Buscar vinho"/>}
+          <button className="icon-btn search-btn" onClick={submitHeaderSearch} aria-label="Buscar"><SearchIcon/></button>
+        </div>
         <button className="icon-btn cart-icon" onClick={()=>setCartOpen(true)} aria-label="Abrir carrinho"><CartIcon/>{cart.length>0&&<span>{cart.length}</span>}</button>
         <a className="shop-pill" href="/loja">Loja <Arrow/></a>
       </div>
@@ -139,7 +181,7 @@ export default function Page(){
       <div className="footer-brand"><div className="footer-logo-lockup"><img src={HEADER_LOGO} alt="Videira Vinhoteca"/></div><p>Curadoria de vinhos com identidade.</p></div>
       <div className="footer-columns">
         <div><h4>Menu</h4><a href="#inicio">Início</a><a href="/loja">Loja</a><a href="#uvas">Uvas</a><a href="#bodegas">Bodegas</a></div>
-        <div><h4>Políticas</h4><a href="#">Privacidade</a><a href="#">Trocas e devoluções</a><a href="#">Termos de uso</a></div>
+        <div><h4>Políticas</h4><a href="/politicas/privacidade">Privacidade</a><a href="/politicas/trocas">Trocas e devoluções</a><a href="/politicas/termos">Termos de uso</a></div>
       </div>
       <div className="footer-contact"><h4>Redes sociais</h4><div className="socials"><a href="https://instagram.com/Videiravinhoteca" target="_blank" rel="noreferrer" aria-label="Instagram"><InstagramIcon/></a><a href="https://wa.me/5545999056277" target="_blank" rel="noreferrer" aria-label="WhatsApp"><WhatsIcon/></a></div><span>@Videiravinhoteca</span></div>
     </footer>
