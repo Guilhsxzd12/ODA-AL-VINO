@@ -116,3 +116,16 @@ export async function loadRelatedWines(winery,excludeId,limit=12){
 export function money(value){
   return Number(value||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 }
+
+
+let wineryPromise;
+export function loadWineries(){
+  if(!wineryPromise){
+    wineryPromise=(async()=>{
+      const response=await fetch(SUPABASE_URL+'/rest/v1/wineries?select=id,name,logo_url,active&active=eq.true&order=name.asc',{headers:{apikey:SUPABASE_KEY},cache:'no-store'});
+      if(!response.ok)return [];
+      return response.json();
+    })();
+  }
+  return wineryPromise;
+}
